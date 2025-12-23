@@ -25,11 +25,9 @@ The full API of this library can be found in [api.md](api.md).
 ```js
 import GmailMcp from 'gmail-mcp';
 
-const client = new GmailMcp({
-  apiKey: process.env['GMAIL_MCP_API_KEY'], // This is the default and can be omitted
-});
+const client = new GmailMcp();
 
-const response = await client.users.getProfile('REPLACE_ME');
+const response = await client.users.getProfile('me');
 
 console.log(response.emailAddress);
 ```
@@ -42,11 +40,9 @@ This library includes TypeScript definitions for all request params and response
 ```ts
 import GmailMcp from 'gmail-mcp';
 
-const client = new GmailMcp({
-  apiKey: process.env['GMAIL_MCP_API_KEY'], // This is the default and can be omitted
-});
+const client = new GmailMcp();
 
-const response: GmailMcp.UserGetProfileResponse = await client.users.getProfile('REPLACE_ME');
+const response: GmailMcp.UserGetProfileResponse = await client.users.getProfile('me');
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
@@ -59,7 +55,7 @@ a subclass of `APIError` will be thrown:
 
 <!-- prettier-ignore -->
 ```ts
-const response = await client.users.getProfile('REPLACE_ME').catch(async (err) => {
+const response = await client.users.getProfile('me').catch(async (err) => {
   if (err instanceof GmailMcp.APIError) {
     console.log(err.status); // 400
     console.log(err.name); // BadRequestError
@@ -99,7 +95,7 @@ const client = new GmailMcp({
 });
 
 // Or, configure per-request:
-await client.users.getProfile('REPLACE_ME', {
+await client.users.getProfile('me', {
   maxRetries: 5,
 });
 ```
@@ -116,7 +112,7 @@ const client = new GmailMcp({
 });
 
 // Override per-request:
-await client.users.getProfile('REPLACE_ME', {
+await client.users.getProfile('me', {
   timeout: 5 * 1000,
 });
 ```
@@ -139,11 +135,11 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 ```ts
 const client = new GmailMcp();
 
-const response = await client.users.getProfile('REPLACE_ME').asResponse();
+const response = await client.users.getProfile('me').asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: response, response: raw } = await client.users.getProfile('REPLACE_ME').withResponse();
+const { data: response, response: raw } = await client.users.getProfile('me').withResponse();
 console.log(raw.headers.get('X-My-Header'));
 console.log(response.emailAddress);
 ```

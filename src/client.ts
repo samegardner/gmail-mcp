@@ -33,11 +33,6 @@ import { isEmptyObj } from './internal/utils/values';
 
 export interface ClientOptions {
   /**
-   * Defaults to process.env['GMAIL_MCP_API_KEY'].
-   */
-  apiKey?: string | null | undefined;
-
-  /**
    * Override the default base URL for the API, e.g., "https://api.example.com/v2/"
    *
    * Defaults to process.env['GMAIL_MCP_BASE_URL'].
@@ -110,8 +105,6 @@ export interface ClientOptions {
  * API Client for interfacing with the Gmail Mcp API.
  */
 export class GmailMcp {
-  apiKey: string | null;
-
   baseURL: string;
   maxRetries: number;
   timeout: number;
@@ -127,7 +120,6 @@ export class GmailMcp {
   /**
    * API Client for interfacing with the Gmail Mcp API.
    *
-   * @param {string | null | undefined} [opts.apiKey=process.env['GMAIL_MCP_API_KEY'] ?? null]
    * @param {string} [opts.baseURL=process.env['GMAIL_MCP_BASE_URL'] ?? https://gmail.googleapis.com/gmail/v1] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
@@ -136,13 +128,8 @@ export class GmailMcp {
    * @param {HeadersLike} opts.defaultHeaders - Default headers to include with every request to the API.
    * @param {Record<string, string | undefined>} opts.defaultQuery - Default query parameters to include with every request to the API.
    */
-  constructor({
-    baseURL = readEnv('GMAIL_MCP_BASE_URL'),
-    apiKey = readEnv('GMAIL_MCP_API_KEY') ?? null,
-    ...opts
-  }: ClientOptions = {}) {
+  constructor({ baseURL = readEnv('GMAIL_MCP_BASE_URL'), ...opts }: ClientOptions = {}) {
     const options: ClientOptions = {
-      apiKey,
       ...opts,
       baseURL: baseURL || `https://gmail.googleapis.com/gmail/v1`,
     };
@@ -163,8 +150,6 @@ export class GmailMcp {
     this.#encoder = Opts.FallbackEncoder;
 
     this._options = options;
-
-    this.apiKey = apiKey;
   }
 
   /**
@@ -180,7 +165,6 @@ export class GmailMcp {
       logLevel: this.logLevel,
       fetch: this.fetch,
       fetchOptions: this.fetchOptions,
-      apiKey: this.apiKey,
       ...options,
     });
     return client;
@@ -198,23 +182,7 @@ export class GmailMcp {
   }
 
   protected validateHeaders({ values, nulls }: NullableHeaders) {
-    if (this.apiKey && values.get('authorization')) {
-      return;
-    }
-    if (nulls.has('authorization')) {
-      return;
-    }
-
-    throw new Error(
-      'Could not resolve authentication method. Expected the apiKey to be set. Or for the "Authorization" headers to be explicitly omitted',
-    );
-  }
-
-  protected async authHeaders(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
-    if (this.apiKey == null) {
-      return undefined;
-    }
-    return buildHeaders([{ Authorization: `Bearer ${this.apiKey}` }]);
+    return;
   }
 
   protected stringifyQuery(query: Record<string, unknown>): string {
@@ -638,7 +606,6 @@ export class GmailMcp {
         ...(options.timeout ? { 'X-Stainless-Timeout': String(Math.trunc(options.timeout / 1000)) } : {}),
         ...getPlatformHeaders(),
       },
-      await this.authHeaders(options),
       this._options.defaultHeaders,
       bodyHeaders,
       options.headers,
