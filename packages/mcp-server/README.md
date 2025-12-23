@@ -9,8 +9,8 @@ It is generated with [Stainless](https://www.stainless.com/).
 Because it's not published yet, clone the repo and build it:
 
 ```sh
-git clone git@github.com:stainless-sdks/gmail-mcp-typescript.git
-cd gmail-mcp-typescript
+git clone git@github.com:samegardner/gmail-mcp.git
+cd gmail-mcp
 ./scripts/bootstrap
 ./scripts/build
 ```
@@ -40,7 +40,7 @@ For clients with a configuration JSON, it might look something like this:
   "mcpServers": {
     "gmail_mcp_api": {
       "command": "node",
-      "args": ["/path/to/local/gmail-mcp-typescript/packages/mcp-server"],
+      "args": ["/path/to/local/gmail-mcp/packages/mcp-server"],
       "env": {
         "GMAIL_MCP_API_KEY": "My API Key"
       }
