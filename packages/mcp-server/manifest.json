@@ -8,9 +8,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/stainless-sdks/gmail-mcp-typescript.git"
+    "url": "git+https://github.com/samegardner/gmail-mcp.git"
   },
-  "homepage": "https://github.com/stainless-sdks/gmail-mcp-typescript/tree/main/packages/mcp-server#readme",
+  "homepage": "https://github.com/samegardner/gmail-mcp/tree/main/packages/mcp-server#readme",
   "documentation": "https://developers.google.com/gmail/api/",
   "server": {
     "type": "node",
