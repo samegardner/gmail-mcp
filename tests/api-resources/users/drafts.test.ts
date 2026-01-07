@@ -2,10 +2,7 @@
 
 import GmailMcp from 'gmail-mcp';
 
-const client = new GmailMcp({
-  apiKey: 'My API Key',
-  baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
-});
+const client = new GmailMcp({ baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010' });
 
 describe('resource drafts', () => {
   // Prism tests are disabled
@@ -60,7 +57,11 @@ describe('resource drafts', () => {
         internalDate: 'internalDate',
         labelIds: ['string'],
         payload: {
-          body: { attachmentId: 'attachmentId', data: 'data', size: 0 },
+          body: {
+            attachmentId: 'attachmentId',
+            data: 'data',
+            size: 0,
+          },
           filename: 'filename',
           headers: [{ name: 'name', value: 'value' }],
           mimeType: 'mimeType',
@@ -93,7 +94,11 @@ describe('resource drafts', () => {
     await expect(
       client.users.drafts.list(
         'userId',
-        { maxResults: 0, pageToken: 'pageToken', q: 'q' },
+        {
+          maxResults: 0,
+          pageToken: 'pageToken',
+          q: 'q',
+        },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(GmailMcp.NotFoundError);

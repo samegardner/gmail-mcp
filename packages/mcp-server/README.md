@@ -9,8 +9,8 @@ It is generated with [Stainless](https://www.stainless.com/).
 Because it's not published yet, clone the repo and build it:
 
 ```sh
-git clone git@github.com:stainless-sdks/gmail-mcp-typescript.git
-cd gmail-mcp-typescript
+git clone git@github.com:samegardner/gmail-mcp.git
+cd gmail-mcp
 ./scripts/bootstrap
 ./scripts/build
 ```
@@ -19,7 +19,6 @@ cd gmail-mcp-typescript
 
 ```sh
 # set env vars as needed
-export GMAIL_MCP_API_KEY="My API Key"
 node ./packages/mcp-server/dist/index.js
 ```
 
@@ -40,10 +39,8 @@ For clients with a configuration JSON, it might look something like this:
   "mcpServers": {
     "gmail_mcp_api": {
       "command": "node",
-      "args": ["/path/to/local/gmail-mcp-typescript/packages/mcp-server"],
-      "env": {
-        "GMAIL_MCP_API_KEY": "My API Key"
-      }
+      "args": ["/path/to/local/gmail-mcp/packages/mcp-server"],
+      "env": {}
     }
   }
 }
@@ -70,23 +67,13 @@ and repeatably.
 
 Launching the client with `--transport=http` launches the server as a remote server using Streamable HTTP transport. The `--port` setting can choose the port it will run on, and the `--socket` setting allows it to run on a Unix socket.
 
-Authorization can be provided via the `Authorization` header using the Bearer scheme.
-
-Additionally, authorization can be provided via the following headers:
-| Header | Equivalent client option | Security scheme |
-| --------------------- | ------------------------ | --------------- |
-| `x-gmail-mcp-api-key` | `apiKey` | bearerAuth |
-
 A configuration JSON for this server might look like this, assuming the server is hosted at `http://localhost:3000`:
 
 ```json
 {
   "mcpServers": {
     "gmail_mcp_api": {
-      "url": "http://localhost:3000",
-      "headers": {
-        "Authorization": "Bearer <auth value>"
-      }
+      "url": "http://localhost:3000"
     }
   }
 }
