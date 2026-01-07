@@ -44,7 +44,13 @@ describe('resource messages', () => {
     await expect(
       client.users.messages.list(
         'userId',
-        { includeSpamTrash: true, labelIds: ['string'], maxResults: 0, pageToken: 'pageToken', q: 'q' },
+        {
+          includeSpamTrash: true,
+          labelIds: ['string'],
+          maxResults: 0,
+          pageToken: 'pageToken',
+          q: 'q',
+        },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(GmailMcp.NotFoundError);

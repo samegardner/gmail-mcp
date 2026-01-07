@@ -57,7 +57,11 @@ describe('resource drafts', () => {
         internalDate: 'internalDate',
         labelIds: ['string'],
         payload: {
-          body: { attachmentId: 'attachmentId', data: 'data', size: 0 },
+          body: {
+            attachmentId: 'attachmentId',
+            data: 'data',
+            size: 0,
+          },
           filename: 'filename',
           headers: [{ name: 'name', value: 'value' }],
           mimeType: 'mimeType',
@@ -90,7 +94,11 @@ describe('resource drafts', () => {
     await expect(
       client.users.drafts.list(
         'userId',
-        { maxResults: 0, pageToken: 'pageToken', q: 'q' },
+        {
+          maxResults: 0,
+          pageToken: 'pageToken',
+          q: 'q',
+        },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(GmailMcp.NotFoundError);
