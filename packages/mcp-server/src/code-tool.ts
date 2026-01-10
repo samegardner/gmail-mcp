@@ -55,10 +55,7 @@ export function codeTool(): McpTool {
       headers: {
         ...(stainlessAPIKey && { Authorization: stainlessAPIKey }),
         'Content-Type': 'application/json',
-        client_envs: JSON.stringify({
-          GMAIL_ACCESS_TOKEN: readEnv('GMAIL_ACCESS_TOKEN'),
-          GMAIL_MCP_BASE_URL: readEnv('GMAIL_MCP_BASE_URL'),
-        }),
+        client_envs: JSON.stringify({ GMAIL_MCP_BASE_URL: readEnv('GMAIL_MCP_BASE_URL') }),
       },
       body: JSON.stringify({
         project_name: 'gmail-mcp',
