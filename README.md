@@ -34,7 +34,9 @@ The full API of this library can be found in [api.md](api.md).
 ```js
 import GmailMcp from 'gmail-mcp';
 
-const client = new GmailMcp();
+const client = new GmailMcp({
+  apiKey: process.env['GMAIL_ACCESS_TOKEN'], // This is the default and can be omitted
+});
 
 const response = await client.users.getProfile('me');
 
@@ -49,7 +51,9 @@ This library includes TypeScript definitions for all request params and response
 ```ts
 import GmailMcp from 'gmail-mcp';
 
-const client = new GmailMcp();
+const client = new GmailMcp({
+  apiKey: process.env['GMAIL_ACCESS_TOKEN'], // This is the default and can be omitted
+});
 
 const response: GmailMcp.UserGetProfileResponse = await client.users.getProfile('me');
 ```
