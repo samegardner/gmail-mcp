@@ -1,5 +1,27 @@
 # Changelog
 
+## 0.2.0 (2026-01-10)
+
+Full Changelog: [v0.1.0...v0.2.0](https://github.com/samegardner/gmail-mcp/compare/v0.1.0...v0.2.0)
+
+### Features
+
+* **api:** manual updates ([386c758](https://github.com/samegardner/gmail-mcp/commit/386c758a41e46872477424c54b80469562b1ac84))
+* **api:** manual updates ([4801710](https://github.com/samegardner/gmail-mcp/commit/480171010fa6b24cfb2fb2d72d636e634a2dbf93))
+* **api:** manual updates ([52fd5b5](https://github.com/samegardner/gmail-mcp/commit/52fd5b5b5095ee6d2587bee20f58a54e42abd137))
+* get it to use bearerAuth ([fa919cb](https://github.com/samegardner/gmail-mcp/commit/fa919cbe10b2d3a068f737bc568a9b46c56c471e))
+
+
+### Bug Fixes
+
+* **mcp:** update code tool prompt ([93c2890](https://github.com/samegardner/gmail-mcp/commit/93c2890d0f914ed8591718080324ca5f52c36210))
+
+
+### Chores
+
+* **internal:** configure MCP Server hosting ([e24c0e7](https://github.com/samegardner/gmail-mcp/commit/e24c0e7afe4d203b130635b30987938877f29415))
+* **internal:** configure MCP Server hosting ([a79437b](https://github.com/samegardner/gmail-mcp/commit/a79437b85971d5d6987b5e452c31374befc9d54c))
+
 ## 0.1.0 (2026-01-07)
 
 Full Changelog: [v0.0.1...v0.1.0](https://github.com/samegardner/gmail-mcp/compare/v0.0.1...v0.1.0)

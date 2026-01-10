@@ -19,6 +19,7 @@ cd gmail-mcp
 
 ```sh
 # set env vars as needed
+export GMAIL_ACCESS_TOKEN="My API Key"
 node ./packages/mcp-server/dist/index.js
 ```
 
@@ -40,7 +41,9 @@ For clients with a configuration JSON, it might look something like this:
     "gmail_mcp_api": {
       "command": "node",
       "args": ["/path/to/local/gmail-mcp/packages/mcp-server"],
-      "env": {}
+      "env": {
+        "GMAIL_ACCESS_TOKEN": "My API Key"
+      }
     }
   }
 }
@@ -67,13 +70,23 @@ and repeatably.
 
 Launching the client with `--transport=http` launches the server as a remote server using Streamable HTTP transport. The `--port` setting can choose the port it will run on, and the `--socket` setting allows it to run on a Unix socket.
 
+Authorization can be provided via the `Authorization` header using the Bearer scheme.
+
+Additionally, authorization can be provided via the following headers:
+| Header | Equivalent client option | Security scheme |
+| ---------------------- | ------------------------ | --------------- |
+| `x-gmail-access-token` | `apiKey` | bearerAuth |
+
 A configuration JSON for this server might look like this, assuming the server is hosted at `http://localhost:3000`:
 
 ```json
 {
   "mcpServers": {
     "gmail_mcp_api": {
-      "url": "http://localhost:3000"
+      "url": "http://localhost:3000",
+      "headers": {
+        "Authorization": "Bearer <auth value>"
+      }
     }
   }
 }
