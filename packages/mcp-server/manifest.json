@@ -18,19 +18,10 @@
     "mcp_config": {
       "command": "node",
       "args": ["${__dirname}/index.js"],
-      "env": {
-        "GMAIL_ACCESS_TOKEN": "${user_config.GMAIL_ACCESS_TOKEN}"
-      }
+      "env": {}
     }
   },
-  "user_config": {
-    "GMAIL_ACCESS_TOKEN": {
-      "title": "api_key",
-      "description": "",
-      "required": false,
-      "type": "string"
-    }
-  },
+  "user_config": {},
   "tools": [],
   "tools_generated": true,
   "compatibility": {

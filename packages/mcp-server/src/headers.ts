@@ -4,22 +4,5 @@ import { IncomingMessage } from 'node:http';
 import { ClientOptions } from 'gmail-mcp';
 
 export const parseAuthHeaders = (req: IncomingMessage): Partial<ClientOptions> => {
-  if (req.headers.authorization) {
-    const scheme = req.headers.authorization.split(' ')[0]!;
-    const value = req.headers.authorization.slice(scheme.length + 1);
-    switch (scheme) {
-      case 'Bearer':
-        return { apiKey: req.headers.authorization.slice('Bearer '.length) };
-      default:
-        throw new Error(
-          'Unsupported authorization scheme. Expected the "Authorization" header to be a supported scheme (Bearer).',
-        );
-    }
-  }
-
-  const apiKey =
-    Array.isArray(req.headers['x-gmail-access-token']) ?
-      req.headers['x-gmail-access-token'][0]
-    : req.headers['x-gmail-access-token'];
-  return { apiKey };
+  return {};
 };
