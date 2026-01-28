@@ -4,6 +4,7 @@ import { McpTool, Metadata, ToolCallResult, asErrorResult, asTextContentResult }
 import { Tool } from '@modelcontextprotocol/sdk/types.js';
 import { readEnv } from './server';
 import { WorkerInput, WorkerOutput } from './code-tool-types';
+import { GmailMcp } from 'gmail-mcp';
 
 const prompt = `Runs JavaScript code to interact with the Gmail Mcp API.
 
@@ -54,7 +55,7 @@ export function codeTool(): McpTool {
       required: ['code'],
     },
   };
-  const handler = async (_: unknown, args: any): Promise<ToolCallResult> => {
+  const handler = async (client: GmailMcp, args: any): Promise<ToolCallResult> => {
     const code = args.code as string;
     const intent = args.intent as string | undefined;
 
@@ -69,7 +70,9 @@ export function codeTool(): McpTool {
       headers: {
         ...(stainlessAPIKey && { Authorization: stainlessAPIKey }),
         'Content-Type': 'application/json',
-        client_envs: JSON.stringify({ GMAIL_MCP_BASE_URL: readEnv('GMAIL_MCP_BASE_URL') }),
+        client_envs: JSON.stringify({
+          GMAIL_MCP_BASE_URL: readEnv('GMAIL_MCP_BASE_URL') ?? client.baseURL ?? undefined,
+        }),
       },
       body: JSON.stringify({
         project_name: 'gmail-mcp',
