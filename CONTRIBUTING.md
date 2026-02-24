@@ -60,7 +60,7 @@ $ yarn link gmail-mcp
 # With pnpm
 $ pnpm link --global
 $ cd ../my-package
-$ pnpm link -—global gmail-mcp
+$ pnpm link --global gmail-mcp
 ```
 
 ## Running tests
