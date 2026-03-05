@@ -155,7 +155,7 @@ const remoteStainlessHandler = async ({
     headers: {
       ...(reqContext.stainlessApiKey && { Authorization: reqContext.stainlessApiKey }),
       'Content-Type': 'application/json',
-      client_envs: JSON.stringify({
+      'x-stainless-mcp-client-envs': JSON.stringify({
         GMAIL_MCP_BASE_URL: readEnv('GMAIL_MCP_BASE_URL') ?? client.baseURL ?? undefined,
       }),
     },
