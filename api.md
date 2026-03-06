@@ -37,7 +37,7 @@ Methods:
 
 - <code title="post /users/{userId}/drafts">client.users.drafts.<a href="./src/resources/users/drafts.ts">create</a>(userID, { ...params }) -> Draft</code>
 - <code title="get /users/{userId}/drafts/{id}">client.users.drafts.<a href="./src/resources/users/drafts.ts">retrieve</a>(id, { ...params }) -> Draft</code>
-- <code title="put /users/{userId}/drafts/{id}">client.users.drafts.<a href="./src/resources/users/drafts.ts">update</a>(pathID, { ...params }) -> Draft</code>
+- <code title="put /users/{userId}/drafts/{id}">client.users.drafts.<a href="./src/resources/users/drafts.ts">update</a>(id, { ...params }) -> Draft</code>
 - <code title="get /users/{userId}/drafts">client.users.drafts.<a href="./src/resources/users/drafts.ts">list</a>(userID, { ...params }) -> DraftListResponse</code>
 - <code title="delete /users/{userId}/drafts/{id}">client.users.drafts.<a href="./src/resources/users/drafts.ts">delete</a>(id, { ...params }) -> void</code>
 - <code title="post /users/{userId}/drafts/send">client.users.drafts.<a href="./src/resources/users/drafts.ts">send</a>(userID, { ...params }) -> Message</code>

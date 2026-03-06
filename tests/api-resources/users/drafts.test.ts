@@ -50,7 +50,7 @@ describe('resource drafts', () => {
   test.skip('update: required and optional params', async () => {
     const response = await client.users.drafts.update('id', {
       userId: 'userId',
-      body_id: 'id',
+      id: 'id',
       message: {
         id: 'id',
         historyId: 'historyId',
