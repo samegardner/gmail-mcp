@@ -26,9 +26,9 @@ export class Drafts extends APIResource {
   /**
    * Replaces a draft's content.
    */
-  update(pathID: string, params: DraftUpdateParams, options?: RequestOptions): APIPromise<Draft> {
+  update(id: string, params: DraftUpdateParams, options?: RequestOptions): APIPromise<Draft> {
     const { userId, ...body } = params;
-    return this._client.put(path`/users/${userId}/drafts/${pathID}`, { body, ...options });
+    return this._client.put(path`/users/${userId}/drafts/${id}`, { body, ...options });
   }
 
   /**
@@ -129,7 +129,7 @@ export interface DraftUpdateParams {
   /**
    * Body param: The draft ID
    */
-  body_id?: string;
+  id?: string;
 
   /**
    * Body param: An email message
