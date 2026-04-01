@@ -62,25 +62,25 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     response: '{ emailAddress?: string; historyId?: string; messagesTotal?: number; threadsTotal?: number; }',
     markdown:
       "## get_profile\n\n`client.users.getProfile(userId: string): { emailAddress?: string; historyId?: string; messagesTotal?: number; threadsTotal?: number; }`\n\n**get** `/users/{userId}/profile`\n\nGets the current user's Gmail profile (email address, message count, etc.)\n\n### Parameters\n\n- `userId: string`\n\n### Returns\n\n- `{ emailAddress?: string; historyId?: string; messagesTotal?: number; threadsTotal?: number; }`\n  User's Gmail profile information\n\n  - `emailAddress?: string`\n  - `historyId?: string`\n  - `messagesTotal?: number`\n  - `threadsTotal?: number`\n\n### Example\n\n```typescript\nimport GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst response = await client.users.getProfile('userId');\n\nconsole.log(response);\n```",
-  },
-  {
-    name: 'retrieve',
-    endpoint: '/users/{userId}/messages/{id}',
-    httpMethod: 'get',
-    summary: 'Get Message',
-    description: 'Gets a specific message by ID, including headers, body, and attachments.',
-    stainlessPath: '(resource) users.messages > (method) retrieve',
-    qualified: 'client.users.messages.retrieve',
-    params: [
-      'userId: string;',
-      'id: string;',
-      "format?: 'full' | 'metadata' | 'minimal' | 'raw';",
-      'metadataHeaders?: string[];',
-    ],
-    response:
-      '{ id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }',
-    markdown:
-      "## retrieve\n\n`client.users.messages.retrieve(userId: string, id: string, format?: 'full' | 'metadata' | 'minimal' | 'raw', metadataHeaders?: string[]): { id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: message_part; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }`\n\n**get** `/users/{userId}/messages/{id}`\n\nGets a specific message by ID, including headers, body, and attachments.\n\n### Parameters\n\n- `userId: string`\n\n- `id: string`\n\n- `format?: 'full' | 'metadata' | 'minimal' | 'raw'`\n  The format to return the message in\n\n- `metadataHeaders?: string[]`\n  When format is METADATA, only include these headers\n\n### Returns\n\n- `{ id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }`\n  An email message\n\n  - `id?: string`\n  - `historyId?: string`\n  - `internalDate?: string`\n  - `labelIds?: string[]`\n  - `payload?: { body?: { attachmentId?: string; data?: string; size?: number; }; filename?: string; headers?: { name?: string; value?: string; }[]; mimeType?: string; partId?: string; parts?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }[]; }`\n  - `raw?: string`\n  - `sizeEstimate?: number`\n  - `snippet?: string`\n  - `threadId?: string`\n\n### Example\n\n```typescript\nimport GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst message = await client.users.messages.retrieve('id', { userId: 'userId' });\n\nconsole.log(message);\n```",
+    perLanguage: {
+      cli: {
+        method: 'users get_profile',
+        example: 'gmail-mcp users get-profile \\\n  --user-id userId',
+      },
+      go: {
+        method: 'client.Users.GetProfile',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/gmail-mcp-go"\n)\n\nfunc main() {\n\tclient := gmailmcp.NewClient()\n\tresponse, err := client.Users.GetProfile(context.TODO(), "userId")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.EmailAddress)\n}\n',
+      },
+      http: {
+        example: 'curl https://gmail.googleapis.com/gmail/v1/users/$USER_ID/profile',
+      },
+      typescript: {
+        method: 'client.users.getProfile',
+        example:
+          "import GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst response = await client.users.getProfile('userId');\n\nconsole.log(response.emailAddress);",
+      },
+    },
   },
   {
     name: 'list',
@@ -102,31 +102,25 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       '{ messages?: { id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: message_part; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }[]; nextPageToken?: string; resultSizeEstimate?: number; }',
     markdown:
       "## list\n\n`client.users.messages.list(userId: string, includeSpamTrash?: boolean, labelIds?: string[], maxResults?: number, pageToken?: string, q?: string): { messages?: message[]; nextPageToken?: string; resultSizeEstimate?: number; }`\n\n**get** `/users/{userId}/messages`\n\nLists messages in the user's mailbox. Use 'q' parameter for Gmail search queries.\n\n### Parameters\n\n- `userId: string`\n\n- `includeSpamTrash?: boolean`\n  Include messages from SPAM and TRASH\n\n- `labelIds?: string[]`\n  Only return messages with these label IDs\n\n- `maxResults?: number`\n  Maximum number of messages to return (default 100, max 500)\n\n- `pageToken?: string`\n  Page token for pagination\n\n- `q?: string`\n  Gmail search query (e.g., 'from:sender@example.com', 'is:unread', 'subject:hello')\n\n### Returns\n\n- `{ messages?: { id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: message_part; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }[]; nextPageToken?: string; resultSizeEstimate?: number; }`\n  Response for listing messages\n\n  - `messages?: { id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }[]`\n  - `nextPageToken?: string`\n  - `resultSizeEstimate?: number`\n\n### Example\n\n```typescript\nimport GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst messages = await client.users.messages.list('userId');\n\nconsole.log(messages);\n```",
-  },
-  {
-    name: 'delete',
-    endpoint: '/users/{userId}/messages/{id}',
-    httpMethod: 'delete',
-    summary: 'Delete Message',
-    description: 'Immediately and permanently deletes a message (cannot be undone).',
-    stainlessPath: '(resource) users.messages > (method) delete',
-    qualified: 'client.users.messages.delete',
-    params: ['userId: string;', 'id: string;'],
-    markdown:
-      "## delete\n\n`client.users.messages.delete(userId: string, id: string): void`\n\n**delete** `/users/{userId}/messages/{id}`\n\nImmediately and permanently deletes a message (cannot be undone).\n\n### Parameters\n\n- `userId: string`\n\n- `id: string`\n\n### Example\n\n```typescript\nimport GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nawait client.users.messages.delete('id', { userId: 'userId' })\n```",
-  },
-  {
-    name: 'get_attachment',
-    endpoint: '/users/{userId}/messages/{messageId}/attachments/{id}',
-    httpMethod: 'get',
-    summary: 'Get Attachment',
-    description: 'Gets a specific message attachment.',
-    stainlessPath: '(resource) users.messages > (method) get_attachment',
-    qualified: 'client.users.messages.getAttachment',
-    params: ['userId: string;', 'messageId: string;', 'id: string;'],
-    response: '{ attachmentId?: string; data?: string; size?: number; }',
-    markdown:
-      "## get_attachment\n\n`client.users.messages.getAttachment(userId: string, messageId: string, id: string): { attachmentId?: string; data?: string; size?: number; }`\n\n**get** `/users/{userId}/messages/{messageId}/attachments/{id}`\n\nGets a specific message attachment.\n\n### Parameters\n\n- `userId: string`\n\n- `messageId: string`\n\n- `id: string`\n\n### Returns\n\n- `{ attachmentId?: string; data?: string; size?: number; }`\n  The body of a MIME message part\n\n  - `attachmentId?: string`\n  - `data?: string`\n  - `size?: number`\n\n### Example\n\n```typescript\nimport GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst response = await client.users.messages.getAttachment('id', { userId: 'userId', messageId: 'messageId' });\n\nconsole.log(response);\n```",
+    perLanguage: {
+      cli: {
+        method: 'messages list',
+        example: 'gmail-mcp users:messages list \\\n  --user-id userId',
+      },
+      go: {
+        method: 'client.Users.Messages.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/gmail-mcp-go"\n)\n\nfunc main() {\n\tclient := gmailmcp.NewClient()\n\tmessages, err := client.Users.Messages.List(\n\t\tcontext.TODO(),\n\t\t"userId",\n\t\tgmailmcp.UserMessageListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", messages.Messages)\n}\n',
+      },
+      http: {
+        example: 'curl https://gmail.googleapis.com/gmail/v1/users/$USER_ID/messages',
+      },
+      typescript: {
+        method: 'client.users.messages.list',
+        example:
+          "import GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst messages = await client.users.messages.list('userId');\n\nconsole.log(messages.messages);",
+      },
+    },
   },
   {
     name: 'send',
@@ -152,6 +146,95 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       '{ id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }',
     markdown:
       "## send\n\n`client.users.messages.send(userId: string, id?: string, historyId?: string, internalDate?: string, labelIds?: string[], payload?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }, raw?: string, sizeEstimate?: number, snippet?: string, threadId?: string): { id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: message_part; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }`\n\n**post** `/users/{userId}/messages/send`\n\nSends an email to recipients specified in To, Cc, and Bcc headers.\n\n### Parameters\n\n- `userId: string`\n\n- `id?: string`\n  The immutable message ID\n\n- `historyId?: string`\n  The history record ID\n\n- `internalDate?: string`\n  Internal message creation timestamp (epoch ms)\n\n- `labelIds?: string[]`\n  List of label IDs applied to this message\n\n- `payload?: { body?: { attachmentId?: string; data?: string; size?: number; }; filename?: string; headers?: { name?: string; value?: string; }[]; mimeType?: string; partId?: string; parts?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }[]; }`\n  A single MIME message part\n  - `body?: { attachmentId?: string; data?: string; size?: number; }`\n    The body of a MIME message part\n  - `filename?: string`\n    The filename of the attachment (if applicable)\n  - `headers?: { name?: string; value?: string; }[]`\n    List of headers for this part\n  - `mimeType?: string`\n    The MIME type of this part\n  - `partId?: string`\n    The part ID\n  - `parts?: { body?: { attachmentId?: string; data?: string; size?: number; }; filename?: string; headers?: { name?: string; value?: string; }[]; mimeType?: string; partId?: string; parts?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }[]; }[]`\n    Child MIME parts (for multipart messages)\n\n- `raw?: string`\n  The entire email in RFC 2822 format, base64url encoded\n\n- `sizeEstimate?: number`\n  Estimated size in bytes\n\n- `snippet?: string`\n  A short excerpt from the message body\n\n- `threadId?: string`\n  The thread ID this message belongs to\n\n### Returns\n\n- `{ id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }`\n  An email message\n\n  - `id?: string`\n  - `historyId?: string`\n  - `internalDate?: string`\n  - `labelIds?: string[]`\n  - `payload?: { body?: { attachmentId?: string; data?: string; size?: number; }; filename?: string; headers?: { name?: string; value?: string; }[]; mimeType?: string; partId?: string; parts?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }[]; }`\n  - `raw?: string`\n  - `sizeEstimate?: number`\n  - `snippet?: string`\n  - `threadId?: string`\n\n### Example\n\n```typescript\nimport GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst message = await client.users.messages.send('userId');\n\nconsole.log(message);\n```",
+    perLanguage: {
+      cli: {
+        method: 'messages send',
+        example: 'gmail-mcp users:messages send \\\n  --user-id userId',
+      },
+      go: {
+        method: 'client.Users.Messages.Send',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/gmail-mcp-go"\n)\n\nfunc main() {\n\tclient := gmailmcp.NewClient()\n\tmessage, err := client.Users.Messages.Send(\n\t\tcontext.TODO(),\n\t\t"userId",\n\t\tgmailmcp.UserMessageSendParams{\n\t\t\tMessage: gmailmcp.MessageParam{},\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", message.ID)\n}\n',
+      },
+      http: {
+        example:
+          "curl https://gmail.googleapis.com/gmail/v1/users/$USER_ID/messages/send \\\n    -H 'Content-Type: application/json' \\\n    -d '{}'",
+      },
+      typescript: {
+        method: 'client.users.messages.send',
+        example:
+          "import GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst message = await client.users.messages.send('userId');\n\nconsole.log(message.id);",
+      },
+    },
+  },
+  {
+    name: 'retrieve',
+    endpoint: '/users/{userId}/messages/{id}',
+    httpMethod: 'get',
+    summary: 'Get Message',
+    description: 'Gets a specific message by ID, including headers, body, and attachments.',
+    stainlessPath: '(resource) users.messages > (method) retrieve',
+    qualified: 'client.users.messages.retrieve',
+    params: [
+      'userId: string;',
+      'id: string;',
+      "format?: 'full' | 'metadata' | 'minimal' | 'raw';",
+      'metadataHeaders?: string[];',
+    ],
+    response:
+      '{ id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }',
+    markdown:
+      "## retrieve\n\n`client.users.messages.retrieve(userId: string, id: string, format?: 'full' | 'metadata' | 'minimal' | 'raw', metadataHeaders?: string[]): { id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: message_part; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }`\n\n**get** `/users/{userId}/messages/{id}`\n\nGets a specific message by ID, including headers, body, and attachments.\n\n### Parameters\n\n- `userId: string`\n\n- `id: string`\n\n- `format?: 'full' | 'metadata' | 'minimal' | 'raw'`\n  The format to return the message in\n\n- `metadataHeaders?: string[]`\n  When format is METADATA, only include these headers\n\n### Returns\n\n- `{ id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }`\n  An email message\n\n  - `id?: string`\n  - `historyId?: string`\n  - `internalDate?: string`\n  - `labelIds?: string[]`\n  - `payload?: { body?: { attachmentId?: string; data?: string; size?: number; }; filename?: string; headers?: { name?: string; value?: string; }[]; mimeType?: string; partId?: string; parts?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }[]; }`\n  - `raw?: string`\n  - `sizeEstimate?: number`\n  - `snippet?: string`\n  - `threadId?: string`\n\n### Example\n\n```typescript\nimport GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst message = await client.users.messages.retrieve('id', { userId: 'userId' });\n\nconsole.log(message);\n```",
+    perLanguage: {
+      cli: {
+        method: 'messages retrieve',
+        example: 'gmail-mcp users:messages retrieve \\\n  --user-id userId \\\n  --id id',
+      },
+      go: {
+        method: 'client.Users.Messages.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/gmail-mcp-go"\n)\n\nfunc main() {\n\tclient := gmailmcp.NewClient()\n\tmessage, err := client.Users.Messages.Get(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\tgmailmcp.UserMessageGetParams{\n\t\t\tUserID: "userId",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", message.ID)\n}\n',
+      },
+      http: {
+        example: 'curl https://gmail.googleapis.com/gmail/v1/users/$USER_ID/messages/$ID',
+      },
+      typescript: {
+        method: 'client.users.messages.retrieve',
+        example:
+          "import GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst message = await client.users.messages.retrieve('id', { userId: 'userId' });\n\nconsole.log(message.id);",
+      },
+    },
+  },
+  {
+    name: 'delete',
+    endpoint: '/users/{userId}/messages/{id}',
+    httpMethod: 'delete',
+    summary: 'Delete Message',
+    description: 'Immediately and permanently deletes a message (cannot be undone).',
+    stainlessPath: '(resource) users.messages > (method) delete',
+    qualified: 'client.users.messages.delete',
+    params: ['userId: string;', 'id: string;'],
+    markdown:
+      "## delete\n\n`client.users.messages.delete(userId: string, id: string): void`\n\n**delete** `/users/{userId}/messages/{id}`\n\nImmediately and permanently deletes a message (cannot be undone).\n\n### Parameters\n\n- `userId: string`\n\n- `id: string`\n\n### Example\n\n```typescript\nimport GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nawait client.users.messages.delete('id', { userId: 'userId' })\n```",
+    perLanguage: {
+      cli: {
+        method: 'messages delete',
+        example: 'gmail-mcp users:messages delete \\\n  --user-id userId \\\n  --id id',
+      },
+      go: {
+        method: 'client.Users.Messages.Delete',
+        example:
+          'package main\n\nimport (\n\t"context"\n\n\t"github.com/stainless-sdks/gmail-mcp-go"\n)\n\nfunc main() {\n\tclient := gmailmcp.NewClient()\n\terr := client.Users.Messages.Delete(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\tgmailmcp.UserMessageDeleteParams{\n\t\t\tUserID: "userId",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
+      },
+      http: {
+        example: 'curl https://gmail.googleapis.com/gmail/v1/users/$USER_ID/messages/$ID \\\n    -X DELETE',
+      },
+      typescript: {
+        method: 'client.users.messages.delete',
+        example:
+          "import GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nawait client.users.messages.delete('id', { userId: 'userId' });",
+      },
+    },
   },
   {
     name: 'trash',
@@ -166,6 +249,93 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       '{ id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }',
     markdown:
       "## trash\n\n`client.users.messages.trash(userId: string, id: string): { id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: message_part; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }`\n\n**post** `/users/{userId}/messages/{id}/trash`\n\nMoves a message to the trash.\n\n### Parameters\n\n- `userId: string`\n\n- `id: string`\n\n### Returns\n\n- `{ id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }`\n  An email message\n\n  - `id?: string`\n  - `historyId?: string`\n  - `internalDate?: string`\n  - `labelIds?: string[]`\n  - `payload?: { body?: { attachmentId?: string; data?: string; size?: number; }; filename?: string; headers?: { name?: string; value?: string; }[]; mimeType?: string; partId?: string; parts?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }[]; }`\n  - `raw?: string`\n  - `sizeEstimate?: number`\n  - `snippet?: string`\n  - `threadId?: string`\n\n### Example\n\n```typescript\nimport GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst message = await client.users.messages.trash('id', { userId: 'userId' });\n\nconsole.log(message);\n```",
+    perLanguage: {
+      cli: {
+        method: 'messages trash',
+        example: 'gmail-mcp users:messages trash \\\n  --user-id userId \\\n  --id id',
+      },
+      go: {
+        method: 'client.Users.Messages.Trash',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/gmail-mcp-go"\n)\n\nfunc main() {\n\tclient := gmailmcp.NewClient()\n\tmessage, err := client.Users.Messages.Trash(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\tgmailmcp.UserMessageTrashParams{\n\t\t\tUserID: "userId",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", message.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://gmail.googleapis.com/gmail/v1/users/$USER_ID/messages/$ID/trash \\\n    -X POST',
+      },
+      typescript: {
+        method: 'client.users.messages.trash',
+        example:
+          "import GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst message = await client.users.messages.trash('id', { userId: 'userId' });\n\nconsole.log(message.id);",
+      },
+    },
+  },
+  {
+    name: 'get_attachment',
+    endpoint: '/users/{userId}/messages/{messageId}/attachments/{id}',
+    httpMethod: 'get',
+    summary: 'Get Attachment',
+    description: 'Gets a specific message attachment.',
+    stainlessPath: '(resource) users.messages > (method) get_attachment',
+    qualified: 'client.users.messages.getAttachment',
+    params: ['userId: string;', 'messageId: string;', 'id: string;'],
+    response: '{ attachmentId?: string; data?: string; size?: number; }',
+    markdown:
+      "## get_attachment\n\n`client.users.messages.getAttachment(userId: string, messageId: string, id: string): { attachmentId?: string; data?: string; size?: number; }`\n\n**get** `/users/{userId}/messages/{messageId}/attachments/{id}`\n\nGets a specific message attachment.\n\n### Parameters\n\n- `userId: string`\n\n- `messageId: string`\n\n- `id: string`\n\n### Returns\n\n- `{ attachmentId?: string; data?: string; size?: number; }`\n  The body of a MIME message part\n\n  - `attachmentId?: string`\n  - `data?: string`\n  - `size?: number`\n\n### Example\n\n```typescript\nimport GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst response = await client.users.messages.getAttachment('id', { userId: 'userId', messageId: 'messageId' });\n\nconsole.log(response);\n```",
+    perLanguage: {
+      cli: {
+        method: 'messages get_attachment',
+        example:
+          'gmail-mcp users:messages get-attachment \\\n  --user-id userId \\\n  --message-id messageId \\\n  --id id',
+      },
+      go: {
+        method: 'client.Users.Messages.GetAttachment',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/gmail-mcp-go"\n)\n\nfunc main() {\n\tclient := gmailmcp.NewClient()\n\tresponse, err := client.Users.Messages.GetAttachment(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\tgmailmcp.UserMessageGetAttachmentParams{\n\t\t\tUserID:    "userId",\n\t\t\tMessageID: "messageId",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.AttachmentID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://gmail.googleapis.com/gmail/v1/users/$USER_ID/messages/$MESSAGE_ID/attachments/$ID',
+      },
+      typescript: {
+        method: 'client.users.messages.getAttachment',
+        example:
+          "import GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst response = await client.users.messages.getAttachment('id', {\n  userId: 'userId',\n  messageId: 'messageId',\n});\n\nconsole.log(response.attachmentId);",
+      },
+    },
+  },
+  {
+    name: 'list',
+    endpoint: '/users/{userId}/drafts',
+    httpMethod: 'get',
+    summary: 'List Drafts',
+    description: "Lists drafts in the user's mailbox.",
+    stainlessPath: '(resource) users.drafts > (method) list',
+    qualified: 'client.users.drafts.list',
+    params: ['userId: string;', 'maxResults?: number;', 'pageToken?: string;', 'q?: string;'],
+    response:
+      '{ drafts?: { id?: string; message?: message; }[]; nextPageToken?: string; resultSizeEstimate?: number; }',
+    markdown:
+      "## list\n\n`client.users.drafts.list(userId: string, maxResults?: number, pageToken?: string, q?: string): { drafts?: draft[]; nextPageToken?: string; resultSizeEstimate?: number; }`\n\n**get** `/users/{userId}/drafts`\n\nLists drafts in the user's mailbox.\n\n### Parameters\n\n- `userId: string`\n\n- `maxResults?: number`\n  Maximum number of drafts to return\n\n- `pageToken?: string`\n  Page token for pagination\n\n- `q?: string`\n  Gmail search query to filter drafts\n\n### Returns\n\n- `{ drafts?: { id?: string; message?: message; }[]; nextPageToken?: string; resultSizeEstimate?: number; }`\n  Response for listing drafts\n\n  - `drafts?: { id?: string; message?: { id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: message_part; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }; }[]`\n  - `nextPageToken?: string`\n  - `resultSizeEstimate?: number`\n\n### Example\n\n```typescript\nimport GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst drafts = await client.users.drafts.list('userId');\n\nconsole.log(drafts);\n```",
+    perLanguage: {
+      cli: {
+        method: 'drafts list',
+        example: 'gmail-mcp users:drafts list \\\n  --user-id userId',
+      },
+      go: {
+        method: 'client.Users.Drafts.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/gmail-mcp-go"\n)\n\nfunc main() {\n\tclient := gmailmcp.NewClient()\n\tdrafts, err := client.Users.Drafts.List(\n\t\tcontext.TODO(),\n\t\t"userId",\n\t\tgmailmcp.UserDraftListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", drafts.Drafts)\n}\n',
+      },
+      http: {
+        example: 'curl https://gmail.googleapis.com/gmail/v1/users/$USER_ID/drafts',
+      },
+      typescript: {
+        method: 'client.users.drafts.list',
+        example:
+          "import GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst drafts = await client.users.drafts.list('userId');\n\nconsole.log(drafts.drafts);",
+      },
+    },
   },
   {
     name: 'create',
@@ -184,6 +354,26 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       '{ id?: string; message?: { id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: message_part; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }; }',
     markdown:
       "## create\n\n`client.users.drafts.create(userId: string, id?: string, message?: { id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: message_part; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }): { id?: string; message?: message; }`\n\n**post** `/users/{userId}/drafts`\n\nCreates a new draft email.\n\n### Parameters\n\n- `userId: string`\n\n- `id?: string`\n  The draft ID\n\n- `message?: { id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }`\n  An email message\n  - `id?: string`\n    The immutable message ID\n  - `historyId?: string`\n    The history record ID\n  - `internalDate?: string`\n    Internal message creation timestamp (epoch ms)\n  - `labelIds?: string[]`\n    List of label IDs applied to this message\n  - `payload?: { body?: { attachmentId?: string; data?: string; size?: number; }; filename?: string; headers?: { name?: string; value?: string; }[]; mimeType?: string; partId?: string; parts?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }[]; }`\n    A single MIME message part\n  - `raw?: string`\n    The entire email in RFC 2822 format, base64url encoded\n  - `sizeEstimate?: number`\n    Estimated size in bytes\n  - `snippet?: string`\n    A short excerpt from the message body\n  - `threadId?: string`\n    The thread ID this message belongs to\n\n### Returns\n\n- `{ id?: string; message?: { id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: message_part; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }; }`\n  A draft email message\n\n  - `id?: string`\n  - `message?: { id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }`\n\n### Example\n\n```typescript\nimport GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst draft = await client.users.drafts.create('userId');\n\nconsole.log(draft);\n```",
+    perLanguage: {
+      cli: {
+        method: 'drafts create',
+        example: 'gmail-mcp users:drafts create \\\n  --user-id userId',
+      },
+      go: {
+        method: 'client.Users.Drafts.New',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/gmail-mcp-go"\n)\n\nfunc main() {\n\tclient := gmailmcp.NewClient()\n\tdraft, err := client.Users.Drafts.New(\n\t\tcontext.TODO(),\n\t\t"userId",\n\t\tgmailmcp.UserDraftNewParams{\n\t\t\tDraft: gmailmcp.DraftParam{},\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", draft.ID)\n}\n',
+      },
+      http: {
+        example:
+          "curl https://gmail.googleapis.com/gmail/v1/users/$USER_ID/drafts \\\n    -H 'Content-Type: application/json' \\\n    -d '{}'",
+      },
+      typescript: {
+        method: 'client.users.drafts.create',
+        example:
+          "import GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst draft = await client.users.drafts.create('userId');\n\nconsole.log(draft.id);",
+      },
+    },
   },
   {
     name: 'retrieve',
@@ -198,6 +388,25 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       '{ id?: string; message?: { id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: message_part; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }; }',
     markdown:
       "## retrieve\n\n`client.users.drafts.retrieve(userId: string, id: string, format?: 'full' | 'metadata' | 'minimal' | 'raw'): { id?: string; message?: message; }`\n\n**get** `/users/{userId}/drafts/{id}`\n\nGets a specific draft by ID.\n\n### Parameters\n\n- `userId: string`\n\n- `id: string`\n\n- `format?: 'full' | 'metadata' | 'minimal' | 'raw'`\n  The format to return the draft in\n\n### Returns\n\n- `{ id?: string; message?: { id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: message_part; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }; }`\n  A draft email message\n\n  - `id?: string`\n  - `message?: { id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }`\n\n### Example\n\n```typescript\nimport GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst draft = await client.users.drafts.retrieve('id', { userId: 'userId' });\n\nconsole.log(draft);\n```",
+    perLanguage: {
+      cli: {
+        method: 'drafts retrieve',
+        example: 'gmail-mcp users:drafts retrieve \\\n  --user-id userId \\\n  --id id',
+      },
+      go: {
+        method: 'client.Users.Drafts.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/gmail-mcp-go"\n)\n\nfunc main() {\n\tclient := gmailmcp.NewClient()\n\tdraft, err := client.Users.Drafts.Get(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\tgmailmcp.UserDraftGetParams{\n\t\t\tUserID: "userId",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", draft.ID)\n}\n',
+      },
+      http: {
+        example: 'curl https://gmail.googleapis.com/gmail/v1/users/$USER_ID/drafts/$ID',
+      },
+      typescript: {
+        method: 'client.users.drafts.retrieve',
+        example:
+          "import GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst draft = await client.users.drafts.retrieve('id', { userId: 'userId' });\n\nconsole.log(draft.id);",
+      },
+    },
   },
   {
     name: 'update',
@@ -217,20 +426,26 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       '{ id?: string; message?: { id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: message_part; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }; }',
     markdown:
       "## update\n\n`client.users.drafts.update(userId: string, id: string, id?: string, message?: { id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: message_part; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }): { id?: string; message?: message; }`\n\n**put** `/users/{userId}/drafts/{id}`\n\nReplaces a draft's content.\n\n### Parameters\n\n- `userId: string`\n\n- `id: string`\n\n- `id?: string`\n  The draft ID\n\n- `message?: { id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }`\n  An email message\n  - `id?: string`\n    The immutable message ID\n  - `historyId?: string`\n    The history record ID\n  - `internalDate?: string`\n    Internal message creation timestamp (epoch ms)\n  - `labelIds?: string[]`\n    List of label IDs applied to this message\n  - `payload?: { body?: { attachmentId?: string; data?: string; size?: number; }; filename?: string; headers?: { name?: string; value?: string; }[]; mimeType?: string; partId?: string; parts?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }[]; }`\n    A single MIME message part\n  - `raw?: string`\n    The entire email in RFC 2822 format, base64url encoded\n  - `sizeEstimate?: number`\n    Estimated size in bytes\n  - `snippet?: string`\n    A short excerpt from the message body\n  - `threadId?: string`\n    The thread ID this message belongs to\n\n### Returns\n\n- `{ id?: string; message?: { id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: message_part; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }; }`\n  A draft email message\n\n  - `id?: string`\n  - `message?: { id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }`\n\n### Example\n\n```typescript\nimport GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst draft = await client.users.drafts.update('id', { userId: 'userId' });\n\nconsole.log(draft);\n```",
-  },
-  {
-    name: 'list',
-    endpoint: '/users/{userId}/drafts',
-    httpMethod: 'get',
-    summary: 'List Drafts',
-    description: "Lists drafts in the user's mailbox.",
-    stainlessPath: '(resource) users.drafts > (method) list',
-    qualified: 'client.users.drafts.list',
-    params: ['userId: string;', 'maxResults?: number;', 'pageToken?: string;', 'q?: string;'],
-    response:
-      '{ drafts?: { id?: string; message?: message; }[]; nextPageToken?: string; resultSizeEstimate?: number; }',
-    markdown:
-      "## list\n\n`client.users.drafts.list(userId: string, maxResults?: number, pageToken?: string, q?: string): { drafts?: draft[]; nextPageToken?: string; resultSizeEstimate?: number; }`\n\n**get** `/users/{userId}/drafts`\n\nLists drafts in the user's mailbox.\n\n### Parameters\n\n- `userId: string`\n\n- `maxResults?: number`\n  Maximum number of drafts to return\n\n- `pageToken?: string`\n  Page token for pagination\n\n- `q?: string`\n  Gmail search query to filter drafts\n\n### Returns\n\n- `{ drafts?: { id?: string; message?: message; }[]; nextPageToken?: string; resultSizeEstimate?: number; }`\n  Response for listing drafts\n\n  - `drafts?: { id?: string; message?: { id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: message_part; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }; }[]`\n  - `nextPageToken?: string`\n  - `resultSizeEstimate?: number`\n\n### Example\n\n```typescript\nimport GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst drafts = await client.users.drafts.list('userId');\n\nconsole.log(drafts);\n```",
+    perLanguage: {
+      cli: {
+        method: 'drafts update',
+        example: 'gmail-mcp users:drafts update \\\n  --user-id userId \\\n  --id id',
+      },
+      go: {
+        method: 'client.Users.Drafts.Update',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/gmail-mcp-go"\n)\n\nfunc main() {\n\tclient := gmailmcp.NewClient()\n\tdraft, err := client.Users.Drafts.Update(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\tgmailmcp.UserDraftUpdateParams{\n\t\t\tUserID: "userId",\n\t\t\tDraft:  gmailmcp.DraftParam{},\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", draft.ID)\n}\n',
+      },
+      http: {
+        example:
+          "curl https://gmail.googleapis.com/gmail/v1/users/$USER_ID/drafts/$ID \\\n    -X PUT \\\n    -H 'Content-Type: application/json' \\\n    -d '{}'",
+      },
+      typescript: {
+        method: 'client.users.drafts.update',
+        example:
+          "import GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst draft = await client.users.drafts.update('id', { userId: 'userId' });\n\nconsole.log(draft.id);",
+      },
+    },
   },
   {
     name: 'delete',
@@ -243,6 +458,25 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     params: ['userId: string;', 'id: string;'],
     markdown:
       "## delete\n\n`client.users.drafts.delete(userId: string, id: string): void`\n\n**delete** `/users/{userId}/drafts/{id}`\n\nImmediately and permanently deletes a draft.\n\n### Parameters\n\n- `userId: string`\n\n- `id: string`\n\n### Example\n\n```typescript\nimport GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nawait client.users.drafts.delete('id', { userId: 'userId' })\n```",
+    perLanguage: {
+      cli: {
+        method: 'drafts delete',
+        example: 'gmail-mcp users:drafts delete \\\n  --user-id userId \\\n  --id id',
+      },
+      go: {
+        method: 'client.Users.Drafts.Delete',
+        example:
+          'package main\n\nimport (\n\t"context"\n\n\t"github.com/stainless-sdks/gmail-mcp-go"\n)\n\nfunc main() {\n\tclient := gmailmcp.NewClient()\n\terr := client.Users.Drafts.Delete(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\tgmailmcp.UserDraftDeleteParams{\n\t\t\tUserID: "userId",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
+      },
+      http: {
+        example: 'curl https://gmail.googleapis.com/gmail/v1/users/$USER_ID/drafts/$ID \\\n    -X DELETE',
+      },
+      typescript: {
+        method: 'client.users.drafts.delete',
+        example:
+          "import GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nawait client.users.drafts.delete('id', { userId: 'userId' });",
+      },
+    },
   },
   {
     name: 'send',
@@ -261,10 +495,46 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       '{ id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }',
     markdown:
       "## send\n\n`client.users.drafts.send(userId: string, id?: string, message?: { id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: message_part; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }): { id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: message_part; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }`\n\n**post** `/users/{userId}/drafts/send`\n\nSends a draft to the recipients in To, Cc, and Bcc headers.\n\n### Parameters\n\n- `userId: string`\n\n- `id?: string`\n  The draft ID\n\n- `message?: { id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }`\n  An email message\n  - `id?: string`\n    The immutable message ID\n  - `historyId?: string`\n    The history record ID\n  - `internalDate?: string`\n    Internal message creation timestamp (epoch ms)\n  - `labelIds?: string[]`\n    List of label IDs applied to this message\n  - `payload?: { body?: { attachmentId?: string; data?: string; size?: number; }; filename?: string; headers?: { name?: string; value?: string; }[]; mimeType?: string; partId?: string; parts?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }[]; }`\n    A single MIME message part\n  - `raw?: string`\n    The entire email in RFC 2822 format, base64url encoded\n  - `sizeEstimate?: number`\n    Estimated size in bytes\n  - `snippet?: string`\n    A short excerpt from the message body\n  - `threadId?: string`\n    The thread ID this message belongs to\n\n### Returns\n\n- `{ id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }`\n  An email message\n\n  - `id?: string`\n  - `historyId?: string`\n  - `internalDate?: string`\n  - `labelIds?: string[]`\n  - `payload?: { body?: { attachmentId?: string; data?: string; size?: number; }; filename?: string; headers?: { name?: string; value?: string; }[]; mimeType?: string; partId?: string; parts?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }[]; }`\n  - `raw?: string`\n  - `sizeEstimate?: number`\n  - `snippet?: string`\n  - `threadId?: string`\n\n### Example\n\n```typescript\nimport GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst message = await client.users.drafts.send('userId');\n\nconsole.log(message);\n```",
+    perLanguage: {
+      cli: {
+        method: 'drafts send',
+        example: 'gmail-mcp users:drafts send \\\n  --user-id userId',
+      },
+      go: {
+        method: 'client.Users.Drafts.Send',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/gmail-mcp-go"\n)\n\nfunc main() {\n\tclient := gmailmcp.NewClient()\n\tmessage, err := client.Users.Drafts.Send(\n\t\tcontext.TODO(),\n\t\t"userId",\n\t\tgmailmcp.UserDraftSendParams{\n\t\t\tDraft: gmailmcp.DraftParam{},\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", message.ID)\n}\n',
+      },
+      http: {
+        example:
+          "curl https://gmail.googleapis.com/gmail/v1/users/$USER_ID/drafts/send \\\n    -H 'Content-Type: application/json' \\\n    -d '{}'",
+      },
+      typescript: {
+        method: 'client.users.drafts.send',
+        example:
+          "import GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst message = await client.users.drafts.send('userId');\n\nconsole.log(message.id);",
+      },
+    },
   },
 ];
 
-const EMBEDDED_READMES: { language: string; content: string }[] = [];
+const EMBEDDED_READMES: { language: string; content: string }[] = [
+  {
+    language: 'go',
+    content:
+      '# Gmail Mcp Go API Library\n\n<a href="https://pkg.go.dev/github.com/stainless-sdks/gmail-mcp-go"><img src="https://pkg.go.dev/badge/github.com/stainless-sdks/gmail-mcp-go.svg" alt="Go Reference"></a>\n\nThe Gmail Mcp Go library provides convenient access to the [Gmail Mcp REST API](https://developers.google.com/gmail/api/)\nfrom applications written in Go.\n\nIt is generated with [Stainless](https://www.stainless.com/).\n\n## MCP Server\n\nUse the Gmail Mcp MCP Server to enable AI assistants to interact with this API, allowing them to explore endpoints, make test requests, and use documentation to help integrate this SDK into your application.\n\n[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=gmail-mcp-mcp&config=eyJuYW1lIjoiZ21haWwtbWNwLW1jcCIsInRyYW5zcG9ydCI6Imh0dHAiLCJ1cmwiOiJodHRwczovL2dtYWlsLW1jcC5zdGxtY3AuY29tIn0)\n[![Install in VS Code](https://img.shields.io/badge/_-Add_to_VS_Code-blue?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCA0MCA0MCI+PHBhdGggZmlsbD0iI0VFRSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMzAuMjM1IDM5Ljg4NGEyLjQ5MSAyLjQ5MSAwIDAgMS0xLjc4MS0uNzNMMTIuNyAyNC43OGwtMy40NiAyLjYyNC0zLjQwNiAyLjU4MmExLjY2NSAxLjY2NSAwIDAgMS0xLjA4Mi4zMzggMS42NjQgMS42NjQgMCAwIDEtMS4wNDYtLjQzMWwtMi4yLTJhMS42NjYgMS42NjYgMCAwIDEgMC0yLjQ2M0w3LjQ1OCAyMCA0LjY3IDE3LjQ1MyAxLjUwNyAxNC41N2ExLjY2NSAxLjY2NSAwIDAgMSAwLTIuNDYzbDIuMi0yYTEuNjY1IDEuNjY1IDAgMCAxIDIuMTMtLjA5N2w2Ljg2MyA1LjIwOUwyOC40NTIuODQ0YTIuNDg4IDIuNDg4IDAgMCAxIDEuODQxLS43MjljLjM1MS4wMDkuNjk5LjA5MSAxLjAxOS4yNDVsOC4yMzYgMy45NjFhMi41IDIuNSAwIDAgMSAxLjQxNSAyLjI1M3YuMDk5LS4wNDVWMzMuMzd2LS4wNDUuMDk1YTIuNTAxIDIuNTAxIDAgMCAxLTEuNDE2IDIuMjU3bC04LjIzNSAzLjk2MWEyLjQ5MiAyLjQ5MiAwIDAgMS0xLjA3Ny4yNDZabS43MTYtMjguOTQ3LTExLjk0OCA5LjA2MiAxMS45NTIgOS4wNjUtLjAwNC0xOC4xMjdaIi8+PC9zdmc+)](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22gmail-mcp-mcp%22%2C%22type%22%3A%22http%22%2C%22url%22%3A%22https%3A%2F%2Fgmail-mcp.stlmcp.com%22%7D)\n\n> Note: You may need to set environment variables in your MCP client.\n\n## Installation\n\n\n\n```go\nimport (\n\t"github.com/stainless-sdks/gmail-mcp-go" // imported as SDK_PackageName\n)\n```\n\n\n\nOr to pin the version:\n\n\n\n```sh\ngo get -u \'github.com/stainless-sdks/gmail-mcp-go@v0.0.1\'\n```\n\n\n\n## Requirements\n\nThis library requires Go 1.22+.\n\n## Usage\n\nThe full API of this library can be found in [api.md](api.md).\n\n```go\npackage main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/gmail-mcp-go"\n)\n\nfunc main() {\n\tclient := gmailmcp.NewClient()\n\tresponse, err := client.Users.GetProfile(context.TODO(), "me")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.EmailAddress)\n}\n\n```\n\n### Request fields\n\nAll request parameters are wrapped in a generic `Field` type,\nwhich we use to distinguish zero values from null or omitted fields.\n\nThis prevents accidentally sending a zero value if you forget a required parameter,\nand enables explicitly sending `null`, `false`, `\'\'`, or `0` on optional parameters.\nAny field not specified is not sent.\n\nTo construct fields with values, use the helpers `String()`, `Int()`, `Float()`, or most commonly, the generic `F[T]()`.\nTo send a null, use `Null[T]()`, and to send a nonconforming value, use `Raw[T](any)`. For example:\n\n```go\nparams := FooParams{\n\tName: SDK_PackageName.F("hello"),\n\n\t// Explicitly send `"description": null`\n\tDescription: SDK_PackageName.Null[string](),\n\n\tPoint: SDK_PackageName.F(SDK_PackageName.Point{\n\t\tX: SDK_PackageName.Int(0),\n\t\tY: SDK_PackageName.Int(1),\n\n\t\t// In cases where the API specifies a given type,\n\t\t// but you want to send something else, use `Raw`:\n\t\tZ: SDK_PackageName.Raw[int64](0.01), // sends a float\n\t}),\n}\n```\n\n### Response objects\n\nAll fields in response structs are value types (not pointers or wrappers).\n\nIf a given field is `null`, not present, or invalid, the corresponding field\nwill simply be its zero value.\n\nAll response structs also include a special `JSON` field, containing more detailed\ninformation about each property, which you can use like so:\n\n```go\nif res.Name == "" {\n\t// true if `"name"` is either not present or explicitly null\n\tres.JSON.Name.IsNull()\n\n\t// true if the `"name"` key was not present in the response JSON at all\n\tres.JSON.Name.IsMissing()\n\n\t// When the API returns data that cannot be coerced to the expected type:\n\tif res.JSON.Name.IsInvalid() {\n\t\traw := res.JSON.Name.Raw()\n\n\t\tlegacyName := struct{\n\t\t\tFirst string `json:"first"`\n\t\t\tLast  string `json:"last"`\n\t\t}{}\n\t\tjson.Unmarshal([]byte(raw), &legacyName)\n\t\tname = legacyName.First + " " + legacyName.Last\n\t}\n}\n```\n\nThese `.JSON` structs also include an `Extras` map containing\nany properties in the json response that were not specified\nin the struct. This can be useful for API features not yet\npresent in the SDK.\n\n```go\nbody := res.JSON.ExtraFields["my_unexpected_field"].Raw()\n```\n\n### RequestOptions\n\nThis library uses the functional options pattern. Functions defined in the\n`SDK_PackageOptionName` package return a `RequestOption`, which is a closure that mutates a\n`RequestConfig`. These options can be supplied to the client or at individual\nrequests. For example:\n\n```go\nclient := SDK_PackageName.SDK_ClientInitializerName(\n\t// Adds a header to every request made by the client\n\tSDK_PackageOptionName.WithHeader("X-Some-Header", "custom_header_info"),\n)\n\nclient.Users.GetProfile(context.TODO(), ...,\n\t// Override the header\n\tSDK_PackageOptionName.WithHeader("X-Some-Header", "some_other_custom_header_info"),\n\t// Add an undocumented field to the request body, using sjson syntax\n\tSDK_PackageOptionName.WithJSONSet("some.json.path", map[string]string{"my": "object"}),\n)\n```\n\nSee the [full list of request options](https://pkg.go.dev/github.com/stainless-sdks/gmail-mcp-go/SDK_PackageOptionName).\n\n### Pagination\n\nThis library provides some conveniences for working with paginated list endpoints.\n\nYou can use `.ListAutoPaging()` methods to iterate through items across all pages:\n\n\n\nOr you can use simple `.List()` methods to fetch a single page and receive a standard response object\nwith additional helper methods like `.GetNextPage()`, e.g.:\n\n\n\n### Errors\n\nWhen the API returns a non-success status code, we return an error with type\n`*SDK_PackageName.Error`. This contains the `StatusCode`, `*http.Request`, and\n`*http.Response` values of the request, as well as the JSON of the error body\n(much like other response objects in the SDK).\n\nTo handle errors, we recommend that you use the `errors.As` pattern:\n\n```go\n_, err := client.Users.GetProfile(context.TODO(), "me")\nif err != nil {\n\tvar apierr *gmailmcp.Error\n\tif errors.As(err, &apierr) {\n\t\tprintln(string(apierr.DumpRequest(true)))  // Prints the serialized HTTP request\n\t\tprintln(string(apierr.DumpResponse(true))) // Prints the serialized HTTP response\n\t}\n\tpanic(err.Error()) // GET "/users/{userId}/profile": 400 Bad Request { ... }\n}\n```\n\nWhen other errors occur, they are returned unwrapped; for example,\nif HTTP transport fails, you might receive `*url.Error` wrapping `*net.OpError`.\n\n### Timeouts\n\nRequests do not time out by default; use context to configure a timeout for a request lifecycle.\n\nNote that if a request is [retried](#retries), the context timeout does not start over.\nTo set a per-retry timeout, use `SDK_PackageOptionName.WithRequestTimeout()`.\n\n```go\n// This sets the timeout for the request, including all the retries.\nctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)\ndefer cancel()\nclient.Users.GetProfile(\n\tctx,\n\t"me",\n\t// This sets the per-retry timeout\n\toption.WithRequestTimeout(20*time.Second),\n)\n```\n\n### File uploads\n\nRequest parameters that correspond to file uploads in multipart requests are typed as\n`param.Field[io.Reader]`. The contents of the `io.Reader` will by default be sent as a multipart form\npart with the file name of "anonymous_file" and content-type of "application/octet-stream".\n\nThe file name and content-type can be customized by implementing `Name() string` or `ContentType()\nstring` on the run-time type of `io.Reader`. Note that `os.File` implements `Name() string`, so a\nfile returned by `os.Open` will be sent with the file name on disk.\n\nWe also provide a helper `SDK_PackageName.FileParam(reader io.Reader, filename string, contentType string)`\nwhich can be used to wrap any `io.Reader` with the appropriate file name and content type.\n\n\n\n### Retries\n\nCertain errors will be automatically retried 2 times by default, with a short exponential backoff.\nWe retry by default all connection errors, 408 Request Timeout, 409 Conflict, 429 Rate Limit,\nand >=500 Internal errors.\n\nYou can use the `WithMaxRetries` option to configure or disable this:\n\n```go\n// Configure the default for all requests:\nclient := gmailmcp.NewClient(\n\toption.WithMaxRetries(0), // default is 2\n)\n\n// Override per-request:\nclient.Users.GetProfile(\n\tcontext.TODO(),\n\t"me",\n\toption.WithMaxRetries(5),\n)\n```\n\n\n### Accessing raw response data (e.g. response headers)\n\nYou can access the raw HTTP response data by using the `option.WithResponseInto()` request option. This is useful when\nyou need to examine response headers, status codes, or other details.\n\n```go\n// Create a variable to store the HTTP response\nvar response *http.Response\nresponse, err := client.Users.GetProfile(\n\tcontext.TODO(),\n\t"me",\n\toption.WithResponseInto(&response),\n)\nif err != nil {\n\t// handle error\n}\nfmt.Printf("%+v\\n", response)\n\nfmt.Printf("Status Code: %d\\n", response.StatusCode)\nfmt.Printf("Headers: %+#v\\n", response.Header)\n```\n\n### Making custom/undocumented requests\n\nThis library is typed for convenient access to the documented API. If you need to access undocumented\nendpoints, params, or response properties, the library can still be used.\n\n#### Undocumented endpoints\n\nTo make requests to undocumented endpoints, you can use `client.Get`, `client.Post`, and other HTTP verbs.\n`RequestOptions` on the client, such as retries, will be respected when making these requests.\n\n```go\nvar (\n    // params can be an io.Reader, a []byte, an encoding/json serializable object,\n    // or a "…Params" struct defined in this library.\n    params map[string]interface{}\n\n    // result can be an []byte, *http.Response, a encoding/json deserializable object,\n    // or a model defined in this library.\n    result *http.Response\n)\nerr := client.Post(context.Background(), "/unspecified", params, &result)\nif err != nil {\n    …\n}\n```\n\n#### Undocumented request params\n\nTo make requests using undocumented parameters, you may use either the `SDK_PackageOptionName.WithQuerySet()`\nor the `SDK_PackageOptionName.WithJSONSet()` methods.\n\n```go\nparams := FooNewParams{\n    ID:   SDK_PackageName.F("id_xxxx"),\n    Data: SDK_PackageName.F(FooNewParamsData{\n        FirstName: SDK_PackageName.F("John"),\n    }),\n}\nclient.Foo.New(context.Background(), params, SDK_PackageOptionName.WithJSONSet("data.last_name", "Doe"))\n```\n\n#### Undocumented response properties\n\nTo access undocumented response properties, you may either access the raw JSON of the response as a string\nwith `result.JSON.RawJSON()`, or get the raw JSON of a particular field on the result with\n`result.JSON.Foo.Raw()`.\n\nAny fields that are not present on the response struct will be saved and can be accessed by `result.JSON.ExtraFields()` which returns the extra fields as a `map[string]Field`.\n\n### Middleware\n\nWe provide `SDK_PackageOptionName.WithMiddleware` which applies the given\nmiddleware to requests.\n\n```go\nfunc Logger(req *http.Request, next SDK_PackageOptionName.MiddlewareNext) (res *http.Response, err error) {\n\t// Before the request\n\tstart := time.Now()\n\tLogReq(req)\n\n\t// Forward the request to the next handler\n\tres, err = next(req)\n\n\t// Handle stuff after the request\n\tend := time.Now()\n\tLogRes(res, err, start - end)\n\n    return res, err\n}\n\nclient := SDK_PackageName.SDK_ClientInitializerName(\n\tSDK_PackageOptionName.WithMiddleware(Logger),\n)\n```\n\nWhen multiple middlewares are provided as variadic arguments, the middlewares\nare applied left to right. If `SDK_PackageOptionName.WithMiddleware` is given\nmultiple times, for example first in the client then the method, the\nmiddleware in the client will run first and the middleware given in the method\nwill run next.\n\nYou may also replace the default `http.Client` with\n`SDK_PackageOptionName.WithHTTPClient(client)`. Only one http client is\naccepted (this overwrites any previous client) and receives requests after any\nmiddleware has been applied.\n\n## Semantic versioning\n\nThis package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) conventions, though certain backwards-incompatible changes may be released as minor versions:\n\n1. Changes to library internals which are technically public but not intended or documented for external use. _(Please open a GitHub issue to let us know if you are relying on such internals.)_\n2. Changes that we do not expect to impact the vast majority of users in practice.\n\nWe take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.\n\nWe are keen for your feedback; please open an [issue](https://www.github.com/stainless-sdks/gmail-mcp-go/issues) with questions, bugs, or suggestions.\n\n## Contributing\n\nSee [the contributing documentation](./CONTRIBUTING.md).\n',
+  },
+  {
+    language: 'typescript',
+    content:
+      "# Gmail Mcp TypeScript API Library\n\n[![NPM version](https://img.shields.io/npm/v/gmail-mcp.svg?label=npm%20(stable))](https://npmjs.org/package/gmail-mcp) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/gmail-mcp)\n\nThis library provides convenient access to the Gmail Mcp REST API from server-side TypeScript or JavaScript.\n\n\n\nThe REST API documentation can be found on [developers.google.com](https://developers.google.com/gmail/api/). The full API of this library can be found in [api.md](api.md).\n\nIt is generated with [Stainless](https://www.stainless.com/).\n\n## MCP Server\n\nUse the Gmail Mcp MCP Server to enable AI assistants to interact with this API, allowing them to explore endpoints, make test requests, and use documentation to help integrate this SDK into your application.\n\n[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=gmail-mcp-mcp&config=eyJuYW1lIjoiZ21haWwtbWNwLW1jcCIsInRyYW5zcG9ydCI6Imh0dHAiLCJ1cmwiOiJodHRwczovL2dtYWlsLW1jcC5zdGxtY3AuY29tIn0)\n[![Install in VS Code](https://img.shields.io/badge/_-Add_to_VS_Code-blue?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCA0MCA0MCI+PHBhdGggZmlsbD0iI0VFRSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMzAuMjM1IDM5Ljg4NGEyLjQ5MSAyLjQ5MSAwIDAgMS0xLjc4MS0uNzNMMTIuNyAyNC43OGwtMy40NiAyLjYyNC0zLjQwNiAyLjU4MmExLjY2NSAxLjY2NSAwIDAgMS0xLjA4Mi4zMzggMS42NjQgMS42NjQgMCAwIDEtMS4wNDYtLjQzMWwtMi4yLTJhMS42NjYgMS42NjYgMCAwIDEgMC0yLjQ2M0w3LjQ1OCAyMCA0LjY3IDE3LjQ1MyAxLjUwNyAxNC41N2ExLjY2NSAxLjY2NSAwIDAgMSAwLTIuNDYzbDIuMi0yYTEuNjY1IDEuNjY1IDAgMCAxIDIuMTMtLjA5N2w2Ljg2MyA1LjIwOUwyOC40NTIuODQ0YTIuNDg4IDIuNDg4IDAgMCAxIDEuODQxLS43MjljLjM1MS4wMDkuNjk5LjA5MSAxLjAxOS4yNDVsOC4yMzYgMy45NjFhMi41IDIuNSAwIDAgMSAxLjQxNSAyLjI1M3YuMDk5LS4wNDVWMzMuMzd2LS4wNDUuMDk1YTIuNTAxIDIuNTAxIDAgMCAxLTEuNDE2IDIuMjU3bC04LjIzNSAzLjk2MWEyLjQ5MiAyLjQ5MiAwIDAgMS0xLjA3Ny4yNDZabS43MTYtMjguOTQ3LTExLjk0OCA5LjA2MiAxMS45NTIgOS4wNjUtLjAwNC0xOC4xMjdaIi8+PC9zdmc+)](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22gmail-mcp-mcp%22%2C%22type%22%3A%22http%22%2C%22url%22%3A%22https%3A%2F%2Fgmail-mcp.stlmcp.com%22%7D)\n\n> Note: You may need to set environment variables in your MCP client.\n\n## Installation\n\n```sh\nnpm install git+ssh://git@github.com:samegardner/gmail-mcp.git\n```\n> [!NOTE]\n> Once this package is [published to npm](https://www.stainless.com/docs/guides/publish), this will become: `npm install gmail-mcp`\n\n\n\n## Usage\n\nThe full API of this library can be found in [api.md](api.md).\n\n<!-- prettier-ignore -->\n```js\nimport GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst response = await client.users.getProfile('me');\n\nconsole.log(response.emailAddress);\n```\n\n\n\n### Request & Response types\n\nThis library includes TypeScript definitions for all request params and response fields. You may import and use them like so:\n\n<!-- prettier-ignore -->\n```ts\nimport GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst response: GmailMcp.UserGetProfileResponse = await client.users.getProfile('me');\n```\n\nDocumentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.\n\n\n\n\n\n## Handling errors\n\nWhen the library is unable to connect to the API,\nor if the API returns a non-success status code (i.e., 4xx or 5xx response),\na subclass of `APIError` will be thrown:\n\n<!-- prettier-ignore -->\n```ts\nconst response = await client.users.getProfile('me').catch(async (err) => {\n  if (err instanceof GmailMcp.APIError) {\n    console.log(err.status); // 400\n    console.log(err.name); // BadRequestError\n    console.log(err.headers); // {server: 'nginx', ...}\n  } else {\n    throw err;\n  }\n});\n```\n\nError codes are as follows:\n\n| Status Code | Error Type                 |\n| ----------- | -------------------------- |\n| 400         | `BadRequestError`          |\n| 401         | `AuthenticationError`      |\n| 403         | `PermissionDeniedError`    |\n| 404         | `NotFoundError`            |\n| 422         | `UnprocessableEntityError` |\n| 429         | `RateLimitError`           |\n| >=500       | `InternalServerError`      |\n| N/A         | `APIConnectionError`       |\n\n### Retries\n\nCertain errors will be automatically retried 2 times by default, with a short exponential backoff.\nConnection errors (for example, due to a network connectivity problem), 408 Request Timeout, 409 Conflict,\n429 Rate Limit, and >=500 Internal errors will all be retried by default.\n\nYou can use the `maxRetries` option to configure or disable this:\n\n<!-- prettier-ignore -->\n```js\n// Configure the default for all requests:\nconst client = new GmailMcp({\n  maxRetries: 0, // default is 2\n});\n\n// Or, configure per-request:\nawait client.users.getProfile('me', {\n  maxRetries: 5,\n});\n```\n\n### Timeouts\n\nRequests time out after 1 minute by default. You can configure this with a `timeout` option:\n\n<!-- prettier-ignore -->\n```ts\n// Configure the default for all requests:\nconst client = new GmailMcp({\n  timeout: 20 * 1000, // 20 seconds (default is 1 minute)\n});\n\n// Override per-request:\nawait client.users.getProfile('me', {\n  timeout: 5 * 1000,\n});\n```\n\nOn timeout, an `APIConnectionTimeoutError` is thrown.\n\nNote that requests which time out will be [retried twice by default](#retries).\n\n\n\n\n\n## Advanced Usage\n\n### Accessing raw Response data (e.g., headers)\n\nThe \"raw\" `Response` returned by `fetch()` can be accessed through the `.asResponse()` method on the `APIPromise` type that all methods return.\nThis method returns as soon as the headers for a successful response are received and does not consume the response body, so you are free to write custom parsing or streaming logic.\n\nYou can also use the `.withResponse()` method to get the raw `Response` along with the parsed data.\nUnlike `.asResponse()` this method consumes the body, returning once it is parsed.\n\n<!-- prettier-ignore -->\n```ts\nconst client = new GmailMcp();\n\nconst response = await client.users.getProfile('me').asResponse();\nconsole.log(response.headers.get('X-My-Header'));\nconsole.log(response.statusText); // access the underlying Response object\n\nconst { data: response, response: raw } = await client.users.getProfile('me').withResponse();\nconsole.log(raw.headers.get('X-My-Header'));\nconsole.log(response.emailAddress);\n```\n\n### Logging\n\n> [!IMPORTANT]\n> All log messages are intended for debugging only. The format and content of log messages\n> may change between releases.\n\n#### Log levels\n\nThe log level can be configured in two ways:\n\n1. Via the `GMAIL_MCP_LOG` environment variable\n2. Using the `logLevel` client option (overrides the environment variable if set)\n\n```ts\nimport GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp({\n  logLevel: 'debug', // Show all log messages\n});\n```\n\nAvailable log levels, from most to least verbose:\n\n- `'debug'` - Show debug messages, info, warnings, and errors\n- `'info'` - Show info messages, warnings, and errors\n- `'warn'` - Show warnings and errors (default)\n- `'error'` - Show only errors\n- `'off'` - Disable all logging\n\nAt the `'debug'` level, all HTTP requests and responses are logged, including headers and bodies.\nSome authentication-related headers are redacted, but sensitive data in request and response bodies\nmay still be visible.\n\n#### Custom logger\n\nBy default, this library logs to `globalThis.console`. You can also provide a custom logger.\nMost logging libraries are supported, including [pino](https://www.npmjs.com/package/pino), [winston](https://www.npmjs.com/package/winston), [bunyan](https://www.npmjs.com/package/bunyan), [consola](https://www.npmjs.com/package/consola), [signale](https://www.npmjs.com/package/signale), and [@std/log](https://jsr.io/@std/log). If your logger doesn't work, please open an issue.\n\nWhen providing a custom logger, the `logLevel` option still controls which messages are emitted, messages\nbelow the configured level will not be sent to your logger.\n\n```ts\nimport GmailMcp from 'gmail-mcp';\nimport pino from 'pino';\n\nconst logger = pino();\n\nconst client = new GmailMcp({\n  logger: logger.child({ name: 'GmailMcp' }),\n  logLevel: 'debug', // Send all messages to pino, allowing it to filter\n});\n```\n\n### Making custom/undocumented requests\n\nThis library is typed for convenient access to the documented API. If you need to access undocumented\nendpoints, params, or response properties, the library can still be used.\n\n#### Undocumented endpoints\n\nTo make requests to undocumented endpoints, you can use `client.get`, `client.post`, and other HTTP verbs.\nOptions on the client, such as retries, will be respected when making these requests.\n\n```ts\nawait client.post('/some/path', {\n  body: { some_prop: 'foo' },\n  query: { some_query_arg: 'bar' },\n});\n```\n\n#### Undocumented request params\n\nTo make requests using undocumented parameters, you may use `// @ts-expect-error` on the undocumented\nparameter. This library doesn't validate at runtime that the request matches the type, so any extra values you\nsend will be sent as-is.\n\n```ts\nclient.users.getProfile({\n  // ...\n  // @ts-expect-error baz is not yet public\n  baz: 'undocumented option',\n});\n```\n\nFor requests with the `GET` verb, any extra params will be in the query, all other requests will send the\nextra param in the body.\n\nIf you want to explicitly send an extra argument, you can do so with the `query`, `body`, and `headers` request\noptions.\n\n#### Undocumented response properties\n\nTo access undocumented response properties, you may access the response object with `// @ts-expect-error` on\nthe response object, or cast the response object to the requisite type. Like the request params, we do not\nvalidate or strip extra properties from the response from the API.\n\n### Customizing the fetch client\n\nBy default, this library expects a global `fetch` function is defined.\n\nIf you want to use a different `fetch` function, you can either polyfill the global:\n\n```ts\nimport fetch from 'my-fetch';\n\nglobalThis.fetch = fetch;\n```\n\nOr pass it to the client:\n\n```ts\nimport GmailMcp from 'gmail-mcp';\nimport fetch from 'my-fetch';\n\nconst client = new GmailMcp({ fetch });\n```\n\n### Fetch options\n\nIf you want to set custom `fetch` options without overriding the `fetch` function, you can provide a `fetchOptions` object when instantiating the client or making a request. (Request-specific options override client options.)\n\n```ts\nimport GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp({\n  fetchOptions: {\n    // `RequestInit` options\n  },\n});\n```\n\n#### Configuring proxies\n\nTo modify proxy behavior, you can provide custom `fetchOptions` that add runtime-specific proxy\noptions to requests:\n\n<img src=\"https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/node.svg\" align=\"top\" width=\"18\" height=\"21\"> **Node** <sup>[[docs](https://github.com/nodejs/undici/blob/main/docs/docs/api/ProxyAgent.md#example---proxyagent-with-fetch)]</sup>\n\n```ts\nimport GmailMcp from 'gmail-mcp';\nimport * as undici from 'undici';\n\nconst proxyAgent = new undici.ProxyAgent('http://localhost:8888');\nconst client = new GmailMcp({\n  fetchOptions: {\n    dispatcher: proxyAgent,\n  },\n});\n```\n\n<img src=\"https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/bun.svg\" align=\"top\" width=\"18\" height=\"21\"> **Bun** <sup>[[docs](https://bun.sh/guides/http/proxy)]</sup>\n\n```ts\nimport GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp({\n  fetchOptions: {\n    proxy: 'http://localhost:8888',\n  },\n});\n```\n\n<img src=\"https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/deno.svg\" align=\"top\" width=\"18\" height=\"21\"> **Deno** <sup>[[docs](https://docs.deno.com/api/deno/~/Deno.createHttpClient)]</sup>\n\n```ts\nimport GmailMcp from 'npm:gmail-mcp';\n\nconst httpClient = Deno.createHttpClient({ proxy: { url: 'http://localhost:8888' } });\nconst client = new GmailMcp({\n  fetchOptions: {\n    client: httpClient,\n  },\n});\n```\n\n## Frequently Asked Questions\n\n## Semantic versioning\n\nThis package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) conventions, though certain backwards-incompatible changes may be released as minor versions:\n\n1. Changes that only affect static types, without breaking runtime behavior.\n2. Changes to library internals which are technically public but not intended or documented for external use. _(Please open a GitHub issue to let us know if you are relying on such internals.)_\n3. Changes that we do not expect to impact the vast majority of users in practice.\n\nWe take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.\n\nWe are keen for your feedback; please open an [issue](https://www.github.com/samegardner/gmail-mcp/issues) with questions, bugs, or suggestions.\n\n## Requirements\n\nTypeScript >= 4.9 is supported.\n\nThe following runtimes are supported:\n\n- Web browsers (Up-to-date Chrome, Firefox, Safari, Edge, and more)\n- Node.js 20 LTS or later ([non-EOL](https://endoflife.date/nodejs)) versions.\n- Deno v1.28.0 or higher.\n- Bun 1.0 or later.\n- Cloudflare Workers.\n- Vercel Edge Runtime.\n- Jest 28 or greater with the `\"node\"` environment (`\"jsdom\"` is not supported at this time).\n- Nitro v2.6 or greater.\n\nNote that React Native is not supported at this time.\n\nIf you are interested in other runtime environments, please open or upvote an issue on GitHub.\n\n## Contributing\n\nSee [the contributing documentation](./CONTRIBUTING.md).\n",
+  },
+  {
+    language: 'cli',
+    content:
+      "# Gmail Mcp CLI\n\nThe official CLI for the [Gmail Mcp REST API](https://developers.google.com/gmail/api/).\n\nIt is generated with [Stainless](https://www.stainless.com/).\n\n## Installation\n\n### Installing with Go\n\nTo test or install the CLI locally, you need [Go](https://go.dev/doc/install) version 1.22 or later installed.\n\n~~~sh\ngo install 'github.com/stainless-sdks/gmail-mcp-cli/cmd/gmail-mcp@latest'\n~~~\n\nOnce you have run `go install`, the binary is placed in your Go bin directory:\n\n- **Default location**: `$HOME/go/bin` (or `$GOPATH/bin` if GOPATH is set)\n- **Check your path**: Run `go env GOPATH` to see the base directory\n\nIf commands aren't found after installation, add the Go bin directory to your PATH:\n\n~~~sh\n# Add to your shell profile (.zshrc, .bashrc, etc.)\nexport PATH=\"$PATH:$(go env GOPATH)/bin\"\n~~~\n\n### Running Locally\n\nAfter cloning the git repository for this project, you can use the\n`scripts/run` script to run the tool locally:\n\n~~~sh\n./scripts/run args...\n~~~\n\n## Usage\n\nThe CLI follows a resource-based command structure:\n\n~~~sh\ngmail-mcp [resource] <command> [flags...]\n~~~\n\n~~~sh\ngmail-mcp users get-profile \\\n  --user-id me\n~~~\n\nFor details about specific commands, use the `--help` flag.\n\n### Global flags\n\n- `--help` - Show command line usage\n- `--debug` - Enable debug logging (includes HTTP request/response details)\n- `--version`, `-v` - Show the CLI version\n- `--base-url` - Use a custom API backend URL\n- `--format` - Change the output format (`auto`, `explore`, `json`, `jsonl`, `pretty`, `raw`, `yaml`)\n- `--format-error` - Change the output format for errors (`auto`, `explore`, `json`, `jsonl`, `pretty`, `raw`, `yaml`)\n- `--transform` - Transform the data output using [GJSON syntax](https://github.com/tidwall/gjson/blob/master/SYNTAX.md)\n- `--transform-error` - Transform the error output using [GJSON syntax](https://github.com/tidwall/gjson/blob/master/SYNTAX.md)\n\n### Passing files as arguments\n\nTo pass files to your API, you can use the `@myfile.ext` syntax:\n\n~~~bash\ngmail-mcp <command> --arg @abe.jpg\n~~~\n\nFiles can also be passed inside JSON or YAML blobs:\n\n~~~bash\ngmail-mcp <command> --arg '{image: \"@abe.jpg\"}'\n# Equivalent:\ngmail-mcp <command> <<YAML\narg:\n  image: \"@abe.jpg\"\nYAML\n~~~\n\nIf you need to pass a string literal that begins with an `@` sign, you can\nescape the `@` sign to avoid accidentally passing a file.\n\n~~~bash\ngmail-mcp <command> --username '\\@abe'\n~~~\n\n#### Explicit encoding\n\nFor JSON endpoints, the CLI tool does filetype sniffing to determine whether the\nfile contents should be sent as a string literal (for plain text files) or as a\nbase64-encoded string literal (for binary files). If you need to explicitly send\nthe file as either plain text or base64-encoded data, you can use\n`@file://myfile.txt` (for string encoding) or `@data://myfile.dat` (for\nbase64-encoding). Note that absolute paths will begin with `@file://` or\n`@data://`, followed by a third `/` (for example, `@file:///tmp/file.txt`).\n\n~~~bash\ngmail-mcp <command> --arg @data://file.txt\n~~~\n",
+  },
+];
 
 const INDEX_OPTIONS = {
   fields: [
