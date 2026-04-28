@@ -63,22 +63,22 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## get_profile\n\n`client.users.getProfile(userId: string): { emailAddress?: string; historyId?: string; messagesTotal?: number; threadsTotal?: number; }`\n\n**get** `/users/{userId}/profile`\n\nGets the current user's Gmail profile (email address, message count, etc.)\n\n### Parameters\n\n- `userId: string`\n\n### Returns\n\n- `{ emailAddress?: string; historyId?: string; messagesTotal?: number; threadsTotal?: number; }`\n  User's Gmail profile information\n\n  - `emailAddress?: string`\n  - `historyId?: string`\n  - `messagesTotal?: number`\n  - `threadsTotal?: number`\n\n### Example\n\n```typescript\nimport GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst response = await client.users.getProfile('userId');\n\nconsole.log(response);\n```",
     perLanguage: {
-      cli: {
-        method: 'users get_profile',
-        example: 'gmail-mcp users get-profile \\\n  --user-id userId',
+      typescript: {
+        method: 'client.users.getProfile',
+        example:
+          "import GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst response = await client.users.getProfile('userId');\n\nconsole.log(response.emailAddress);",
       },
       go: {
         method: 'client.Users.GetProfile',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/gmail-mcp-go"\n)\n\nfunc main() {\n\tclient := gmailmcp.NewClient()\n\tresponse, err := client.Users.GetProfile(context.TODO(), "userId")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.EmailAddress)\n}\n',
       },
+      cli: {
+        method: 'users get_profile',
+        example: 'gmail-mcp users get-profile \\\n  --user-id userId',
+      },
       http: {
         example: 'curl https://gmail.googleapis.com/gmail/v1/users/$USER_ID/profile',
-      },
-      typescript: {
-        method: 'client.users.getProfile',
-        example:
-          "import GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst response = await client.users.getProfile('userId');\n\nconsole.log(response.emailAddress);",
       },
     },
   },
@@ -103,22 +103,22 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## list\n\n`client.users.messages.list(userId: string, includeSpamTrash?: boolean, labelIds?: string[], maxResults?: number, pageToken?: string, q?: string): { messages?: message[]; nextPageToken?: string; resultSizeEstimate?: number; }`\n\n**get** `/users/{userId}/messages`\n\nLists messages in the user's mailbox. Use 'q' parameter for Gmail search queries.\n\n### Parameters\n\n- `userId: string`\n\n- `includeSpamTrash?: boolean`\n  Include messages from SPAM and TRASH\n\n- `labelIds?: string[]`\n  Only return messages with these label IDs\n\n- `maxResults?: number`\n  Maximum number of messages to return (default 100, max 500)\n\n- `pageToken?: string`\n  Page token for pagination\n\n- `q?: string`\n  Gmail search query (e.g., 'from:sender@example.com', 'is:unread', 'subject:hello')\n\n### Returns\n\n- `{ messages?: { id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: message_part; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }[]; nextPageToken?: string; resultSizeEstimate?: number; }`\n  Response for listing messages\n\n  - `messages?: { id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }[]`\n  - `nextPageToken?: string`\n  - `resultSizeEstimate?: number`\n\n### Example\n\n```typescript\nimport GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst messages = await client.users.messages.list('userId');\n\nconsole.log(messages);\n```",
     perLanguage: {
-      cli: {
-        method: 'messages list',
-        example: 'gmail-mcp users:messages list \\\n  --user-id userId',
+      typescript: {
+        method: 'client.users.messages.list',
+        example:
+          "import GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst messages = await client.users.messages.list('userId');\n\nconsole.log(messages.messages);",
       },
       go: {
         method: 'client.Users.Messages.List',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/gmail-mcp-go"\n)\n\nfunc main() {\n\tclient := gmailmcp.NewClient()\n\tmessages, err := client.Users.Messages.List(\n\t\tcontext.TODO(),\n\t\t"userId",\n\t\tgmailmcp.UserMessageListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", messages.Messages)\n}\n',
       },
+      cli: {
+        method: 'messages list',
+        example: 'gmail-mcp users:messages list \\\n  --user-id userId',
+      },
       http: {
         example: 'curl https://gmail.googleapis.com/gmail/v1/users/$USER_ID/messages',
-      },
-      typescript: {
-        method: 'client.users.messages.list',
-        example:
-          "import GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst messages = await client.users.messages.list('userId');\n\nconsole.log(messages.messages);",
       },
     },
   },
@@ -147,23 +147,23 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## send\n\n`client.users.messages.send(userId: string, id?: string, historyId?: string, internalDate?: string, labelIds?: string[], payload?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }, raw?: string, sizeEstimate?: number, snippet?: string, threadId?: string): { id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: message_part; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }`\n\n**post** `/users/{userId}/messages/send`\n\nSends an email to recipients specified in To, Cc, and Bcc headers.\n\n### Parameters\n\n- `userId: string`\n\n- `id?: string`\n  The immutable message ID\n\n- `historyId?: string`\n  The history record ID\n\n- `internalDate?: string`\n  Internal message creation timestamp (epoch ms)\n\n- `labelIds?: string[]`\n  List of label IDs applied to this message\n\n- `payload?: { body?: { attachmentId?: string; data?: string; size?: number; }; filename?: string; headers?: { name?: string; value?: string; }[]; mimeType?: string; partId?: string; parts?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }[]; }`\n  A single MIME message part\n  - `body?: { attachmentId?: string; data?: string; size?: number; }`\n    The body of a MIME message part\n  - `filename?: string`\n    The filename of the attachment (if applicable)\n  - `headers?: { name?: string; value?: string; }[]`\n    List of headers for this part\n  - `mimeType?: string`\n    The MIME type of this part\n  - `partId?: string`\n    The part ID\n  - `parts?: { body?: { attachmentId?: string; data?: string; size?: number; }; filename?: string; headers?: { name?: string; value?: string; }[]; mimeType?: string; partId?: string; parts?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }[]; }[]`\n    Child MIME parts (for multipart messages)\n\n- `raw?: string`\n  The entire email in RFC 2822 format, base64url encoded\n\n- `sizeEstimate?: number`\n  Estimated size in bytes\n\n- `snippet?: string`\n  A short excerpt from the message body\n\n- `threadId?: string`\n  The thread ID this message belongs to\n\n### Returns\n\n- `{ id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }`\n  An email message\n\n  - `id?: string`\n  - `historyId?: string`\n  - `internalDate?: string`\n  - `labelIds?: string[]`\n  - `payload?: { body?: { attachmentId?: string; data?: string; size?: number; }; filename?: string; headers?: { name?: string; value?: string; }[]; mimeType?: string; partId?: string; parts?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }[]; }`\n  - `raw?: string`\n  - `sizeEstimate?: number`\n  - `snippet?: string`\n  - `threadId?: string`\n\n### Example\n\n```typescript\nimport GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst message = await client.users.messages.send('userId');\n\nconsole.log(message);\n```",
     perLanguage: {
-      cli: {
-        method: 'messages send',
-        example: 'gmail-mcp users:messages send \\\n  --user-id userId',
+      typescript: {
+        method: 'client.users.messages.send',
+        example:
+          "import GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst message = await client.users.messages.send('userId');\n\nconsole.log(message.id);",
       },
       go: {
         method: 'client.Users.Messages.Send',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/gmail-mcp-go"\n)\n\nfunc main() {\n\tclient := gmailmcp.NewClient()\n\tmessage, err := client.Users.Messages.Send(\n\t\tcontext.TODO(),\n\t\t"userId",\n\t\tgmailmcp.UserMessageSendParams{\n\t\t\tMessage: gmailmcp.MessageParam{},\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", message.ID)\n}\n',
       },
+      cli: {
+        method: 'messages send',
+        example: 'gmail-mcp users:messages send \\\n  --user-id userId',
+      },
       http: {
         example:
           "curl https://gmail.googleapis.com/gmail/v1/users/$USER_ID/messages/send \\\n    -H 'Content-Type: application/json' \\\n    -d '{}'",
-      },
-      typescript: {
-        method: 'client.users.messages.send',
-        example:
-          "import GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst message = await client.users.messages.send('userId');\n\nconsole.log(message.id);",
       },
     },
   },
@@ -186,22 +186,22 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## retrieve\n\n`client.users.messages.retrieve(userId: string, id: string, format?: 'full' | 'metadata' | 'minimal' | 'raw', metadataHeaders?: string[]): { id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: message_part; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }`\n\n**get** `/users/{userId}/messages/{id}`\n\nGets a specific message by ID, including headers, body, and attachments.\n\n### Parameters\n\n- `userId: string`\n\n- `id: string`\n\n- `format?: 'full' | 'metadata' | 'minimal' | 'raw'`\n  The format to return the message in\n\n- `metadataHeaders?: string[]`\n  When format is METADATA, only include these headers\n\n### Returns\n\n- `{ id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }`\n  An email message\n\n  - `id?: string`\n  - `historyId?: string`\n  - `internalDate?: string`\n  - `labelIds?: string[]`\n  - `payload?: { body?: { attachmentId?: string; data?: string; size?: number; }; filename?: string; headers?: { name?: string; value?: string; }[]; mimeType?: string; partId?: string; parts?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }[]; }`\n  - `raw?: string`\n  - `sizeEstimate?: number`\n  - `snippet?: string`\n  - `threadId?: string`\n\n### Example\n\n```typescript\nimport GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst message = await client.users.messages.retrieve('id', { userId: 'userId' });\n\nconsole.log(message);\n```",
     perLanguage: {
-      cli: {
-        method: 'messages retrieve',
-        example: 'gmail-mcp users:messages retrieve \\\n  --user-id userId \\\n  --id id',
+      typescript: {
+        method: 'client.users.messages.retrieve',
+        example:
+          "import GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst message = await client.users.messages.retrieve('id', { userId: 'userId' });\n\nconsole.log(message.id);",
       },
       go: {
         method: 'client.Users.Messages.Get',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/gmail-mcp-go"\n)\n\nfunc main() {\n\tclient := gmailmcp.NewClient()\n\tmessage, err := client.Users.Messages.Get(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\tgmailmcp.UserMessageGetParams{\n\t\t\tUserID: "userId",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", message.ID)\n}\n',
       },
+      cli: {
+        method: 'messages retrieve',
+        example: 'gmail-mcp users:messages retrieve \\\n  --user-id userId \\\n  --id id',
+      },
       http: {
         example: 'curl https://gmail.googleapis.com/gmail/v1/users/$USER_ID/messages/$ID',
-      },
-      typescript: {
-        method: 'client.users.messages.retrieve',
-        example:
-          "import GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst message = await client.users.messages.retrieve('id', { userId: 'userId' });\n\nconsole.log(message.id);",
       },
     },
   },
@@ -217,22 +217,22 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## delete\n\n`client.users.messages.delete(userId: string, id: string): void`\n\n**delete** `/users/{userId}/messages/{id}`\n\nImmediately and permanently deletes a message (cannot be undone).\n\n### Parameters\n\n- `userId: string`\n\n- `id: string`\n\n### Example\n\n```typescript\nimport GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nawait client.users.messages.delete('id', { userId: 'userId' })\n```",
     perLanguage: {
-      cli: {
-        method: 'messages delete',
-        example: 'gmail-mcp users:messages delete \\\n  --user-id userId \\\n  --id id',
+      typescript: {
+        method: 'client.users.messages.delete',
+        example:
+          "import GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nawait client.users.messages.delete('id', { userId: 'userId' });",
       },
       go: {
         method: 'client.Users.Messages.Delete',
         example:
           'package main\n\nimport (\n\t"context"\n\n\t"github.com/stainless-sdks/gmail-mcp-go"\n)\n\nfunc main() {\n\tclient := gmailmcp.NewClient()\n\terr := client.Users.Messages.Delete(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\tgmailmcp.UserMessageDeleteParams{\n\t\t\tUserID: "userId",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
       },
+      cli: {
+        method: 'messages delete',
+        example: 'gmail-mcp users:messages delete \\\n  --user-id userId \\\n  --id id',
+      },
       http: {
         example: 'curl https://gmail.googleapis.com/gmail/v1/users/$USER_ID/messages/$ID \\\n    -X DELETE',
-      },
-      typescript: {
-        method: 'client.users.messages.delete',
-        example:
-          "import GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nawait client.users.messages.delete('id', { userId: 'userId' });",
       },
     },
   },
@@ -250,23 +250,23 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## trash\n\n`client.users.messages.trash(userId: string, id: string): { id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: message_part; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }`\n\n**post** `/users/{userId}/messages/{id}/trash`\n\nMoves a message to the trash.\n\n### Parameters\n\n- `userId: string`\n\n- `id: string`\n\n### Returns\n\n- `{ id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }`\n  An email message\n\n  - `id?: string`\n  - `historyId?: string`\n  - `internalDate?: string`\n  - `labelIds?: string[]`\n  - `payload?: { body?: { attachmentId?: string; data?: string; size?: number; }; filename?: string; headers?: { name?: string; value?: string; }[]; mimeType?: string; partId?: string; parts?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }[]; }`\n  - `raw?: string`\n  - `sizeEstimate?: number`\n  - `snippet?: string`\n  - `threadId?: string`\n\n### Example\n\n```typescript\nimport GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst message = await client.users.messages.trash('id', { userId: 'userId' });\n\nconsole.log(message);\n```",
     perLanguage: {
-      cli: {
-        method: 'messages trash',
-        example: 'gmail-mcp users:messages trash \\\n  --user-id userId \\\n  --id id',
+      typescript: {
+        method: 'client.users.messages.trash',
+        example:
+          "import GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst message = await client.users.messages.trash('id', { userId: 'userId' });\n\nconsole.log(message.id);",
       },
       go: {
         method: 'client.Users.Messages.Trash',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/gmail-mcp-go"\n)\n\nfunc main() {\n\tclient := gmailmcp.NewClient()\n\tmessage, err := client.Users.Messages.Trash(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\tgmailmcp.UserMessageTrashParams{\n\t\t\tUserID: "userId",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", message.ID)\n}\n',
       },
+      cli: {
+        method: 'messages trash',
+        example: 'gmail-mcp users:messages trash \\\n  --user-id userId \\\n  --id id',
+      },
       http: {
         example:
           'curl https://gmail.googleapis.com/gmail/v1/users/$USER_ID/messages/$ID/trash \\\n    -X POST',
-      },
-      typescript: {
-        method: 'client.users.messages.trash',
-        example:
-          "import GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst message = await client.users.messages.trash('id', { userId: 'userId' });\n\nconsole.log(message.id);",
       },
     },
   },
@@ -283,24 +283,24 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## get_attachment\n\n`client.users.messages.getAttachment(userId: string, messageId: string, id: string): { attachmentId?: string; data?: string; size?: number; }`\n\n**get** `/users/{userId}/messages/{messageId}/attachments/{id}`\n\nGets a specific message attachment.\n\n### Parameters\n\n- `userId: string`\n\n- `messageId: string`\n\n- `id: string`\n\n### Returns\n\n- `{ attachmentId?: string; data?: string; size?: number; }`\n  The body of a MIME message part\n\n  - `attachmentId?: string`\n  - `data?: string`\n  - `size?: number`\n\n### Example\n\n```typescript\nimport GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst response = await client.users.messages.getAttachment('id', { userId: 'userId', messageId: 'messageId' });\n\nconsole.log(response);\n```",
     perLanguage: {
-      cli: {
-        method: 'messages get_attachment',
+      typescript: {
+        method: 'client.users.messages.getAttachment',
         example:
-          'gmail-mcp users:messages get-attachment \\\n  --user-id userId \\\n  --message-id messageId \\\n  --id id',
+          "import GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst response = await client.users.messages.getAttachment('id', {\n  userId: 'userId',\n  messageId: 'messageId',\n});\n\nconsole.log(response.attachmentId);",
       },
       go: {
         method: 'client.Users.Messages.GetAttachment',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/gmail-mcp-go"\n)\n\nfunc main() {\n\tclient := gmailmcp.NewClient()\n\tresponse, err := client.Users.Messages.GetAttachment(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\tgmailmcp.UserMessageGetAttachmentParams{\n\t\t\tUserID:    "userId",\n\t\t\tMessageID: "messageId",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.AttachmentID)\n}\n',
       },
+      cli: {
+        method: 'messages get_attachment',
+        example:
+          'gmail-mcp users:messages get-attachment \\\n  --user-id userId \\\n  --message-id messageId \\\n  --id id',
+      },
       http: {
         example:
           'curl https://gmail.googleapis.com/gmail/v1/users/$USER_ID/messages/$MESSAGE_ID/attachments/$ID',
-      },
-      typescript: {
-        method: 'client.users.messages.getAttachment',
-        example:
-          "import GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst response = await client.users.messages.getAttachment('id', {\n  userId: 'userId',\n  messageId: 'messageId',\n});\n\nconsole.log(response.attachmentId);",
       },
     },
   },
@@ -318,22 +318,22 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## list\n\n`client.users.drafts.list(userId: string, maxResults?: number, pageToken?: string, q?: string): { drafts?: draft[]; nextPageToken?: string; resultSizeEstimate?: number; }`\n\n**get** `/users/{userId}/drafts`\n\nLists drafts in the user's mailbox.\n\n### Parameters\n\n- `userId: string`\n\n- `maxResults?: number`\n  Maximum number of drafts to return\n\n- `pageToken?: string`\n  Page token for pagination\n\n- `q?: string`\n  Gmail search query to filter drafts\n\n### Returns\n\n- `{ drafts?: { id?: string; message?: message; }[]; nextPageToken?: string; resultSizeEstimate?: number; }`\n  Response for listing drafts\n\n  - `drafts?: { id?: string; message?: { id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: message_part; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }; }[]`\n  - `nextPageToken?: string`\n  - `resultSizeEstimate?: number`\n\n### Example\n\n```typescript\nimport GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst drafts = await client.users.drafts.list('userId');\n\nconsole.log(drafts);\n```",
     perLanguage: {
-      cli: {
-        method: 'drafts list',
-        example: 'gmail-mcp users:drafts list \\\n  --user-id userId',
+      typescript: {
+        method: 'client.users.drafts.list',
+        example:
+          "import GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst drafts = await client.users.drafts.list('userId');\n\nconsole.log(drafts.drafts);",
       },
       go: {
         method: 'client.Users.Drafts.List',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/gmail-mcp-go"\n)\n\nfunc main() {\n\tclient := gmailmcp.NewClient()\n\tdrafts, err := client.Users.Drafts.List(\n\t\tcontext.TODO(),\n\t\t"userId",\n\t\tgmailmcp.UserDraftListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", drafts.Drafts)\n}\n',
       },
+      cli: {
+        method: 'drafts list',
+        example: 'gmail-mcp users:drafts list \\\n  --user-id userId',
+      },
       http: {
         example: 'curl https://gmail.googleapis.com/gmail/v1/users/$USER_ID/drafts',
-      },
-      typescript: {
-        method: 'client.users.drafts.list',
-        example:
-          "import GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst drafts = await client.users.drafts.list('userId');\n\nconsole.log(drafts.drafts);",
       },
     },
   },
@@ -355,23 +355,23 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## create\n\n`client.users.drafts.create(userId: string, id?: string, message?: { id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: message_part; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }): { id?: string; message?: message; }`\n\n**post** `/users/{userId}/drafts`\n\nCreates a new draft email.\n\n### Parameters\n\n- `userId: string`\n\n- `id?: string`\n  The draft ID\n\n- `message?: { id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }`\n  An email message\n  - `id?: string`\n    The immutable message ID\n  - `historyId?: string`\n    The history record ID\n  - `internalDate?: string`\n    Internal message creation timestamp (epoch ms)\n  - `labelIds?: string[]`\n    List of label IDs applied to this message\n  - `payload?: { body?: { attachmentId?: string; data?: string; size?: number; }; filename?: string; headers?: { name?: string; value?: string; }[]; mimeType?: string; partId?: string; parts?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }[]; }`\n    A single MIME message part\n  - `raw?: string`\n    The entire email in RFC 2822 format, base64url encoded\n  - `sizeEstimate?: number`\n    Estimated size in bytes\n  - `snippet?: string`\n    A short excerpt from the message body\n  - `threadId?: string`\n    The thread ID this message belongs to\n\n### Returns\n\n- `{ id?: string; message?: { id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: message_part; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }; }`\n  A draft email message\n\n  - `id?: string`\n  - `message?: { id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }`\n\n### Example\n\n```typescript\nimport GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst draft = await client.users.drafts.create('userId');\n\nconsole.log(draft);\n```",
     perLanguage: {
-      cli: {
-        method: 'drafts create',
-        example: 'gmail-mcp users:drafts create \\\n  --user-id userId',
+      typescript: {
+        method: 'client.users.drafts.create',
+        example:
+          "import GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst draft = await client.users.drafts.create('userId');\n\nconsole.log(draft.id);",
       },
       go: {
         method: 'client.Users.Drafts.New',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/gmail-mcp-go"\n)\n\nfunc main() {\n\tclient := gmailmcp.NewClient()\n\tdraft, err := client.Users.Drafts.New(\n\t\tcontext.TODO(),\n\t\t"userId",\n\t\tgmailmcp.UserDraftNewParams{\n\t\t\tDraft: gmailmcp.DraftParam{},\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", draft.ID)\n}\n',
       },
+      cli: {
+        method: 'drafts create',
+        example: 'gmail-mcp users:drafts create \\\n  --user-id userId',
+      },
       http: {
         example:
           "curl https://gmail.googleapis.com/gmail/v1/users/$USER_ID/drafts \\\n    -H 'Content-Type: application/json' \\\n    -d '{}'",
-      },
-      typescript: {
-        method: 'client.users.drafts.create',
-        example:
-          "import GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst draft = await client.users.drafts.create('userId');\n\nconsole.log(draft.id);",
       },
     },
   },
@@ -389,22 +389,22 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## retrieve\n\n`client.users.drafts.retrieve(userId: string, id: string, format?: 'full' | 'metadata' | 'minimal' | 'raw'): { id?: string; message?: message; }`\n\n**get** `/users/{userId}/drafts/{id}`\n\nGets a specific draft by ID.\n\n### Parameters\n\n- `userId: string`\n\n- `id: string`\n\n- `format?: 'full' | 'metadata' | 'minimal' | 'raw'`\n  The format to return the draft in\n\n### Returns\n\n- `{ id?: string; message?: { id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: message_part; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }; }`\n  A draft email message\n\n  - `id?: string`\n  - `message?: { id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }`\n\n### Example\n\n```typescript\nimport GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst draft = await client.users.drafts.retrieve('id', { userId: 'userId' });\n\nconsole.log(draft);\n```",
     perLanguage: {
-      cli: {
-        method: 'drafts retrieve',
-        example: 'gmail-mcp users:drafts retrieve \\\n  --user-id userId \\\n  --id id',
+      typescript: {
+        method: 'client.users.drafts.retrieve',
+        example:
+          "import GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst draft = await client.users.drafts.retrieve('id', { userId: 'userId' });\n\nconsole.log(draft.id);",
       },
       go: {
         method: 'client.Users.Drafts.Get',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/gmail-mcp-go"\n)\n\nfunc main() {\n\tclient := gmailmcp.NewClient()\n\tdraft, err := client.Users.Drafts.Get(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\tgmailmcp.UserDraftGetParams{\n\t\t\tUserID: "userId",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", draft.ID)\n}\n',
       },
+      cli: {
+        method: 'drafts retrieve',
+        example: 'gmail-mcp users:drafts retrieve \\\n  --user-id userId \\\n  --id id',
+      },
       http: {
         example: 'curl https://gmail.googleapis.com/gmail/v1/users/$USER_ID/drafts/$ID',
-      },
-      typescript: {
-        method: 'client.users.drafts.retrieve',
-        example:
-          "import GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst draft = await client.users.drafts.retrieve('id', { userId: 'userId' });\n\nconsole.log(draft.id);",
       },
     },
   },
@@ -427,23 +427,23 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## update\n\n`client.users.drafts.update(userId: string, id: string, id?: string, message?: { id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: message_part; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }): { id?: string; message?: message; }`\n\n**put** `/users/{userId}/drafts/{id}`\n\nReplaces a draft's content.\n\n### Parameters\n\n- `userId: string`\n\n- `id: string`\n\n- `id?: string`\n  The draft ID\n\n- `message?: { id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }`\n  An email message\n  - `id?: string`\n    The immutable message ID\n  - `historyId?: string`\n    The history record ID\n  - `internalDate?: string`\n    Internal message creation timestamp (epoch ms)\n  - `labelIds?: string[]`\n    List of label IDs applied to this message\n  - `payload?: { body?: { attachmentId?: string; data?: string; size?: number; }; filename?: string; headers?: { name?: string; value?: string; }[]; mimeType?: string; partId?: string; parts?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }[]; }`\n    A single MIME message part\n  - `raw?: string`\n    The entire email in RFC 2822 format, base64url encoded\n  - `sizeEstimate?: number`\n    Estimated size in bytes\n  - `snippet?: string`\n    A short excerpt from the message body\n  - `threadId?: string`\n    The thread ID this message belongs to\n\n### Returns\n\n- `{ id?: string; message?: { id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: message_part; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }; }`\n  A draft email message\n\n  - `id?: string`\n  - `message?: { id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }`\n\n### Example\n\n```typescript\nimport GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst draft = await client.users.drafts.update('id', { userId: 'userId' });\n\nconsole.log(draft);\n```",
     perLanguage: {
-      cli: {
-        method: 'drafts update',
-        example: 'gmail-mcp users:drafts update \\\n  --user-id userId \\\n  --id id',
+      typescript: {
+        method: 'client.users.drafts.update',
+        example:
+          "import GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst draft = await client.users.drafts.update('id', { userId: 'userId' });\n\nconsole.log(draft.id);",
       },
       go: {
         method: 'client.Users.Drafts.Update',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/gmail-mcp-go"\n)\n\nfunc main() {\n\tclient := gmailmcp.NewClient()\n\tdraft, err := client.Users.Drafts.Update(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\tgmailmcp.UserDraftUpdateParams{\n\t\t\tUserID: "userId",\n\t\t\tDraft:  gmailmcp.DraftParam{},\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", draft.ID)\n}\n',
       },
+      cli: {
+        method: 'drafts update',
+        example: 'gmail-mcp users:drafts update \\\n  --user-id userId \\\n  --id id',
+      },
       http: {
         example:
           "curl https://gmail.googleapis.com/gmail/v1/users/$USER_ID/drafts/$ID \\\n    -X PUT \\\n    -H 'Content-Type: application/json' \\\n    -d '{}'",
-      },
-      typescript: {
-        method: 'client.users.drafts.update',
-        example:
-          "import GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst draft = await client.users.drafts.update('id', { userId: 'userId' });\n\nconsole.log(draft.id);",
       },
     },
   },
@@ -459,22 +459,22 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## delete\n\n`client.users.drafts.delete(userId: string, id: string): void`\n\n**delete** `/users/{userId}/drafts/{id}`\n\nImmediately and permanently deletes a draft.\n\n### Parameters\n\n- `userId: string`\n\n- `id: string`\n\n### Example\n\n```typescript\nimport GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nawait client.users.drafts.delete('id', { userId: 'userId' })\n```",
     perLanguage: {
-      cli: {
-        method: 'drafts delete',
-        example: 'gmail-mcp users:drafts delete \\\n  --user-id userId \\\n  --id id',
+      typescript: {
+        method: 'client.users.drafts.delete',
+        example:
+          "import GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nawait client.users.drafts.delete('id', { userId: 'userId' });",
       },
       go: {
         method: 'client.Users.Drafts.Delete',
         example:
           'package main\n\nimport (\n\t"context"\n\n\t"github.com/stainless-sdks/gmail-mcp-go"\n)\n\nfunc main() {\n\tclient := gmailmcp.NewClient()\n\terr := client.Users.Drafts.Delete(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\tgmailmcp.UserDraftDeleteParams{\n\t\t\tUserID: "userId",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
       },
+      cli: {
+        method: 'drafts delete',
+        example: 'gmail-mcp users:drafts delete \\\n  --user-id userId \\\n  --id id',
+      },
       http: {
         example: 'curl https://gmail.googleapis.com/gmail/v1/users/$USER_ID/drafts/$ID \\\n    -X DELETE',
-      },
-      typescript: {
-        method: 'client.users.drafts.delete',
-        example:
-          "import GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nawait client.users.drafts.delete('id', { userId: 'userId' });",
       },
     },
   },
@@ -496,23 +496,23 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## send\n\n`client.users.drafts.send(userId: string, id?: string, message?: { id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: message_part; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }): { id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: message_part; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }`\n\n**post** `/users/{userId}/drafts/send`\n\nSends a draft to the recipients in To, Cc, and Bcc headers.\n\n### Parameters\n\n- `userId: string`\n\n- `id?: string`\n  The draft ID\n\n- `message?: { id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }`\n  An email message\n  - `id?: string`\n    The immutable message ID\n  - `historyId?: string`\n    The history record ID\n  - `internalDate?: string`\n    Internal message creation timestamp (epoch ms)\n  - `labelIds?: string[]`\n    List of label IDs applied to this message\n  - `payload?: { body?: { attachmentId?: string; data?: string; size?: number; }; filename?: string; headers?: { name?: string; value?: string; }[]; mimeType?: string; partId?: string; parts?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }[]; }`\n    A single MIME message part\n  - `raw?: string`\n    The entire email in RFC 2822 format, base64url encoded\n  - `sizeEstimate?: number`\n    Estimated size in bytes\n  - `snippet?: string`\n    A short excerpt from the message body\n  - `threadId?: string`\n    The thread ID this message belongs to\n\n### Returns\n\n- `{ id?: string; historyId?: string; internalDate?: string; labelIds?: string[]; payload?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }; raw?: string; sizeEstimate?: number; snippet?: string; threadId?: string; }`\n  An email message\n\n  - `id?: string`\n  - `historyId?: string`\n  - `internalDate?: string`\n  - `labelIds?: string[]`\n  - `payload?: { body?: { attachmentId?: string; data?: string; size?: number; }; filename?: string; headers?: { name?: string; value?: string; }[]; mimeType?: string; partId?: string; parts?: { body?: object; filename?: string; headers?: object[]; mimeType?: string; partId?: string; parts?: message_part[]; }[]; }`\n  - `raw?: string`\n  - `sizeEstimate?: number`\n  - `snippet?: string`\n  - `threadId?: string`\n\n### Example\n\n```typescript\nimport GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst message = await client.users.drafts.send('userId');\n\nconsole.log(message);\n```",
     perLanguage: {
-      cli: {
-        method: 'drafts send',
-        example: 'gmail-mcp users:drafts send \\\n  --user-id userId',
+      typescript: {
+        method: 'client.users.drafts.send',
+        example:
+          "import GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst message = await client.users.drafts.send('userId');\n\nconsole.log(message.id);",
       },
       go: {
         method: 'client.Users.Drafts.Send',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/gmail-mcp-go"\n)\n\nfunc main() {\n\tclient := gmailmcp.NewClient()\n\tmessage, err := client.Users.Drafts.Send(\n\t\tcontext.TODO(),\n\t\t"userId",\n\t\tgmailmcp.UserDraftSendParams{\n\t\t\tDraft: gmailmcp.DraftParam{},\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", message.ID)\n}\n',
       },
+      cli: {
+        method: 'drafts send',
+        example: 'gmail-mcp users:drafts send \\\n  --user-id userId',
+      },
       http: {
         example:
           "curl https://gmail.googleapis.com/gmail/v1/users/$USER_ID/drafts/send \\\n    -H 'Content-Type: application/json' \\\n    -d '{}'",
-      },
-      typescript: {
-        method: 'client.users.drafts.send',
-        example:
-          "import GmailMcp from 'gmail-mcp';\n\nconst client = new GmailMcp();\n\nconst message = await client.users.drafts.send('userId');\n\nconsole.log(message.id);",
       },
     },
   },
