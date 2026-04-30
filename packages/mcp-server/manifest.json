@@ -17,11 +17,17 @@
     "entry_point": "index.js",
     "mcp_config": {
       "command": "node",
-      "args": ["${__dirname}/index.js"],
-      "env": {}
+      "args": [
+        "${__dirname}/index.js"
+      ],
+      "env": {
+
+      }
     }
   },
-  "user_config": {},
+  "user_config": {
+
+  },
   "tools": [],
   "tools_generated": true,
   "compatibility": {
@@ -29,5 +35,7 @@
       "node": ">=18.0.0"
     }
   },
-  "keywords": ["api"]
+  "keywords": [
+    "api"
+  ]
 }
