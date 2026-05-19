@@ -1,7 +1,6 @@
 import fs from 'fs';
 import type { ResponseLike } from 'gmail-mcp/internal/to-file';
 import { toFile } from 'gmail-mcp/core/uploads';
-import { File } from 'node:buffer';
 
 class MyClass {
   name: string = 'foo';
