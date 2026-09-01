@@ -1,7 +1,7 @@
 {
   "dxt_version": "0.2",
   "name": "gmail-mcp-mcp",
-  "version": "0.0.1",
+  "version": "0.3.0",
   "description": "The official MCP Server for the Gmail Mcp API",
   "author": {
     "name": "Gmail Mcp"
@@ -20,14 +20,10 @@
       "args": [
         "${__dirname}/index.js"
       ],
-      "env": {
-
-      }
+      "env": {}
     }
   },
-  "user_config": {
-
-  },
+  "user_config": {},
   "tools": [],
   "tools_generated": true,
   "compatibility": {
