@@ -2,13 +2,10 @@
 
 import GmailMcp from 'gmail-mcp';
 
-const client = new GmailMcp({
-  apiKey: 'My API Key',
-  baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
-});
+const client = new GmailMcp({ baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010' });
 
 describe('resource messages', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('retrieve: only required params', async () => {
     const responsePromise = client.users.messages.retrieve('id', { userId: 'userId' });
     const rawResponse = await responsePromise.asResponse();
@@ -20,7 +17,7 @@ describe('resource messages', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('retrieve: required and optional params', async () => {
     const response = await client.users.messages.retrieve('id', {
       userId: 'userId',
@@ -29,7 +26,7 @@ describe('resource messages', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list', async () => {
     const responsePromise = client.users.messages.list('userId');
     const rawResponse = await responsePromise.asResponse();
@@ -41,7 +38,7 @@ describe('resource messages', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
@@ -59,7 +56,7 @@ describe('resource messages', () => {
     ).rejects.toThrow(GmailMcp.NotFoundError);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('delete: only required params', async () => {
     const responsePromise = client.users.messages.delete('id', { userId: 'userId' });
     const rawResponse = await responsePromise.asResponse();
@@ -71,12 +68,12 @@ describe('resource messages', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('delete: required and optional params', async () => {
     const response = await client.users.messages.delete('id', { userId: 'userId' });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('getAttachment: only required params', async () => {
     const responsePromise = client.users.messages.getAttachment('id', {
       userId: 'userId',
@@ -91,7 +88,7 @@ describe('resource messages', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('getAttachment: required and optional params', async () => {
     const response = await client.users.messages.getAttachment('id', {
       userId: 'userId',
@@ -99,7 +96,7 @@ describe('resource messages', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('send', async () => {
     const responsePromise = client.users.messages.send('userId', {});
     const rawResponse = await responsePromise.asResponse();
@@ -111,7 +108,7 @@ describe('resource messages', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('trash: only required params', async () => {
     const responsePromise = client.users.messages.trash('id', { userId: 'userId' });
     const rawResponse = await responsePromise.asResponse();
@@ -123,7 +120,7 @@ describe('resource messages', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('trash: required and optional params', async () => {
     const response = await client.users.messages.trash('id', { userId: 'userId' });
   });

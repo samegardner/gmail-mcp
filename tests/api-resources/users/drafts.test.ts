@@ -2,13 +2,10 @@
 
 import GmailMcp from 'gmail-mcp';
 
-const client = new GmailMcp({
-  apiKey: 'My API Key',
-  baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
-});
+const client = new GmailMcp({ baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010' });
 
 describe('resource drafts', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create', async () => {
     const responsePromise = client.users.drafts.create('userId', {});
     const rawResponse = await responsePromise.asResponse();
@@ -20,7 +17,7 @@ describe('resource drafts', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('retrieve: only required params', async () => {
     const responsePromise = client.users.drafts.retrieve('id', { userId: 'userId' });
     const rawResponse = await responsePromise.asResponse();
@@ -32,12 +29,12 @@ describe('resource drafts', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('retrieve: required and optional params', async () => {
     const response = await client.users.drafts.retrieve('id', { userId: 'userId', format: 'full' });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('update: only required params', async () => {
     const responsePromise = client.users.drafts.update('id', { userId: 'userId' });
     const rawResponse = await responsePromise.asResponse();
@@ -49,11 +46,11 @@ describe('resource drafts', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('update: required and optional params', async () => {
     const response = await client.users.drafts.update('id', {
       userId: 'userId',
-      body_id: 'id',
+      id: 'id',
       message: {
         id: 'id',
         historyId: 'historyId',
@@ -79,7 +76,7 @@ describe('resource drafts', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list', async () => {
     const responsePromise = client.users.drafts.list('userId');
     const rawResponse = await responsePromise.asResponse();
@@ -91,7 +88,7 @@ describe('resource drafts', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
@@ -107,7 +104,7 @@ describe('resource drafts', () => {
     ).rejects.toThrow(GmailMcp.NotFoundError);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('delete: only required params', async () => {
     const responsePromise = client.users.drafts.delete('id', { userId: 'userId' });
     const rawResponse = await responsePromise.asResponse();
@@ -119,12 +116,12 @@ describe('resource drafts', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('delete: required and optional params', async () => {
     const response = await client.users.drafts.delete('id', { userId: 'userId' });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('send', async () => {
     const responsePromise = client.users.drafts.send('userId', {});
     const rawResponse = await responsePromise.asResponse();
